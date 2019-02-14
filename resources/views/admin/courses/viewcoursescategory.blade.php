@@ -30,26 +30,28 @@
                                             <thead>
                                             <tr>
                                                 <th>Sl.No</th>
+                                                <th>Category Name</th>
                                                 <th>Stream Name</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($streamFullData as $index=>$val)
+                                            @foreach($courseFullData as $index=>$val)
                                                 <tr>
                                                     <td>{{$index+1}}</td>
+                                                    <td>{{$val->category_name}}</td>
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
-                                                        @if($val->active_status=='Enable')
+                                                        @if($val->status=='Enable')
                                                             <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
                                                             <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ Form::open(array('url'=>'admin/streams','class'=>'floating-labels','id'=>'streamEditForm'))  }}
-                                                        {!! Form::hidden('id_stream', '', ['class' => 'form-control','id'=>'id_stream']) !!}
+                                                        {{ Form::open(array('url'=>'admin/coursescategory','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
+                                                        {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
 
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
@@ -69,31 +71,31 @@
                                             <thead>
                                             <tr>
                                                 <th>Sl.No</th>
+                                                <th>Category Name</th>
                                                 <th>Stream Name</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($streamActive as $index=>$val)
+                                            @foreach($courseActiveData as $index=>$val)
                                                 <tr>
                                                     <td>{{$index+1}}</td>
+                                                    <td>{{$val->category_name}}</td>
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
-                                                        @if($val->active_status=='Enable')
+                                                        @if($val->status=='Enable')
                                                             <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
-                                                            <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger"><span style="font-size:12px">Inactive</span> </a>
+                                                            <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ Form::open(array('url'=>'admin/streams','class'=>'floating-labels','id'=>'streamEditForm'))  }}
-                                                        {!! Form::hidden('id_stream', '', ['class' => 'form-control','id'=>'id_stream']) !!}
+                                                        {{ Form::open(array('url'=>'admin/coursescategory','class'=>'floating-labels','id'=>'coursesCategoryEditForm'))  }}
+                                                        {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_category']) !!}
 
-                                                        {{--<a href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger edit_btn">Edit </a>--}}
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
-                                                        {{--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning" value="Edit"></input>--}}
                                                         {{ Form::close() }}
                                                     </td>
                                                 </tr>
@@ -104,37 +106,38 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane  " id="inactive" role="tabpanel">
+
+                                <div class="tab-pane" id="inactive" role="tabpanel">
                                     <div class="p-20">
                                         <table id="inactive_table" class="display nowrap" style="width:100%">
                                             <thead>
                                             <tr>
                                                 <th>Sl.No</th>
+                                                <th>Category Name</th>
                                                 <th>Stream Name</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($streamInactive as $index=>$val)
+                                            @foreach($courseInactiveData as $index=>$val)
                                                 <tr>
                                                     <td>{{$index+1}}</td>
+                                                    <td>{{$val->category_name}}</td>
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
-                                                        @if($val->active_status=='Enable')
-                                                            <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success" id="active_btn" ><span style="font-size:12px">Active</span></a>
+                                                        @if($val->status=='Enable')
+                                                            <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
-                                                            <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn" id="inactive_btn"><span style="font-size:12px">Inactive</span> </a>
+                                                            <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ Form::open(array('url'=>'admin/streams','class'=>'floating-labels','id'=>'streamEditForm'))  }}
-                                                        {!! Form::hidden('id_stream', '', ['class' => 'form-control','id'=>'id_stream']) !!}
+                                                        {{ Form::open(array('url'=>'admin/coursescategory','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
+                                                        {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
 
-                                                        {{--<a href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger edit_btn">Edit </a>--}}
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
-                                                        {{--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning" value="Edit"></input>--}}
                                                         {{ Form::close() }}
                                                     </td>
                                                 </tr>
@@ -144,6 +147,20 @@
                                             </tbody>
                                         </table>
                                     </div>
+
+                                    {{--  <div class="p-20">
+                                        <table id="employee-grid" class="display nowrap" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Sl.No</th>
+                                                <th>Category Name</th>
+                                                <th>Stream Name</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>--}}
                                 </div>
                             </div>
 
@@ -168,9 +185,60 @@
     <script type="text/javascript" src="{!! asset('https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js') !!}"></script>
     <script type="text/javascript" src="{!! asset('https://cdn.datatables.net/plug-ins/1.10.19/api/fnReloadAjax.js') !!}"></script>
 
-    <script type="text/javascript" src="{!! asset('public/assets/js/admin/streams/streams-view.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('public/assets/js/admin/courses/category-view.js') !!}"></script>
 
 
+    <script>
+        /*$(document).ready(function() {
+
+
+                var dataTable = $('#employee-grid').DataTable( {
+                    "processing": true,
+                    "serverSide": true,
+                    "responsive":true,
+                    "ajax":{
+                        url :"../api/loadCoursesCategory", // json datasource
+                        type: "post",  // method  , by default get
+
+                        error: function(){  // error handling
+                            $(".employee-grid-error").html("");
+                            $("#employee-grid").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                            $("#employee-grid_processing").css("display","none");
+
+                        }
+                    },
+                    "aoColumns": [
+                        {'mData': 'id'},
+                        {'mData': 'category_name'},
+                        {'mData': 'stream_name'},
+                        {'mData': 'status', "render": function ( data, type, row ) {
+                                if(row.status == 'Enable'){
+                                    return '<a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success"><span style="font-size:12px">Active</span></a>';
+                                }
+                                else{
+                                    return '<a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger"><span style="font-size:12px">Inactive</span></a>';
+
+                                }
+
+                            },
+                        },
+                        {'mData': 'category_name', "render": function ( data, type, row ) {
+                                return 'Edit';
+
+                            },
+                        },
+                        /!*{'mData': 'stream_name', "render": function ( data, type, row ) {
+                               console.log(row.id);
+
+                           },
+                       },*!/
+
+                    ]
+
+                } );
+
+        } );*/
+    </script>
 
 
 @endsection

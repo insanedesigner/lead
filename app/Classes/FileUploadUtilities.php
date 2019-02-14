@@ -4,7 +4,7 @@ namespace App\Classes;
 //use App\Models\VehicleModels;
 
 class FileUploadUtilities{
-    public static function imageUploader($targetDir, $image, $scriptType){
+    public static function imageUploader($targetDir, $image, $category, $scriptType){
 
 
 

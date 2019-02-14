@@ -23,10 +23,17 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //Admin Controller
 Route::any('admin/dashboard', 'Admin\AdminController@showDashboard')->name('adminDashboard')->middleware('validuser');
-Route::any('admin/streams', 'Admin\AdminController@showAddStreams')->name('showAddStreams')->middleware('validuser');
-Route::any('admin/handleAddStreamContents', 'Admin\AdminController@handleAddStreamContents')->name('handleAddStreamContents')->middleware('validuser');
-Route::any('admin/handleAddStreamSeo', 'Admin\AdminController@handleAddStreamSeo')->name('handleAddStreamSeo')->middleware('validuser');
-Route::any('admin/viewstreams', 'Admin\AdminController@showViewStreams')->name('showViewStreams')->middleware('validuser');
+Route::any('admin/streams', 'Admin\StreamsController@showAddStreams')->name('showAddStreams')->middleware('validuser');
+Route::any('admin/handleAddStreamContents', 'Admin\StreamsController@handleAddStreamContents')->name('handleAddStreamContents')->middleware('validuser');
+Route::any('admin/viewstreams', 'Admin\StreamsController@showViewStreams')->name('showViewStreams')->middleware('validuser');
+Route::any('admin/coursescategory', 'Admin\CoursesCategoryController@showCoursesCategory')->name('showCoursesCategory')->middleware('validuser');
+Route::any('admin/handleAddCoursesCategory', 'Admin\CoursesCategoryController@handleAddCoursesCategory')->name('handleAddCoursesCategory')->middleware('validuser');
+Route::any('admin/viewcoursescategory', 'Admin\CoursesCategoryController@showViewCoursesCategory')->name('showViewCoursesCategory')->middleware('validuser');
+Route::any('admin/courses', 'Admin\CoursesController@showCourses')->name('showCourses')->middleware('validuser');
+Route::any('admin/handleAddCourses', 'Admin\CoursesController@handleAddCourses')->name('handleAddCourses')->middleware('validuser');
+Route::any('admin/viewcourses', 'Admin\CoursesController@showViewCourses')->name('showViewCourses')->middleware('validuser');
+Route::any('admin/university', 'Admin\UniversityController@showAddUniversity')->name('showAddUniversity')->middleware('validuser');
+Route::any('admin/handleAddUniversity', 'Admin\UniversityController@handleAddUniversity')->name('handleAddUniversity')->middleware('validuser');
 
 
 

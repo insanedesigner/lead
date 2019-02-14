@@ -10,8 +10,12 @@
 <!-- Custom CSS -->
 <link href="{!! asset('public/assets/css/style.css') !!}"  rel="stylesheet" type="text/css" />
 
+<link href="../public/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
 <!-- You can change the theme colors from here -->
-<link href="public/assets/css/colors/blue.css" id="theme" rel="stylesheet">
+<link href="../public/assets/css/colors/blue.css" id="theme" rel="stylesheet">
+
+
 {{--<link href="{!! asset('../assets/css/colors/blue.css') !!}"  rel="stylesheet" id="theme" type="text/css" />--}}
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

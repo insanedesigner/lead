@@ -17,7 +17,7 @@ $(function() {
         });*/
         tinymce.init({
             selector: 'textarea#desc1',  // change this value according to your html
-            images_upload_url: '../api/streamDescriptionImageUpload',
+            images_upload_url: '../api/coursesDescriptionImageUpload',
             images_upload_base_path: '../',
             images_upload_credentials: true,
             plugins: 'preview image link media table insertdatetime imagetools help',
@@ -28,7 +28,7 @@ $(function() {
 
         tinymce.init({
             selector: 'textarea#desc2',  // change this value according to your html
-            images_upload_url: '../api/streamDescriptionImageUpload',
+            images_upload_url: '../api/coursesDescriptionImageUpload',
             images_upload_base_path: '../',
             images_upload_credentials: true,
             plugins: 'image link media table insertdatetime imagetools help',
@@ -57,9 +57,9 @@ $(function() {
 
     var runFeaturedImageUpload =   function(){
         $('.dropify').dropify();
-    }
+    };
 
-    var runFeaturedThumbImageUpload   =   function(){
+    /*var runFeaturedThumbImageUpload   =   function(){
         $('.featured_upload_btn').bind('click',function(e){
             e.preventDefault();
 
@@ -84,11 +84,10 @@ $(function() {
 
         });
 
-    }
+    }*/
+    /*var runFeatureThumbImageUploadExtended  =   function(inputImageName, files, bucketName, activeClick){
 
-    var runFeatureThumbImageUploadExtended  =   function(inputImageName, files, bucketName, activeClick){
-
-        var basePath                =   "public/assets/images/"
+        var basePath                =   "public/assets/images/";
         var msgString               =   "";
         var dataString              =   new FormData();
 
@@ -132,19 +131,23 @@ $(function() {
             }
         });
 
-    }
+    }*/
 
-    var runStreamValidation =   function(){
+    var runCoursesValidation =   function(){
 
-        $.validator.addMethod('featuredImageSelectedOrNot', function(value, element, param) {
+       /* $.validator.addMethod("imgNameDot", function(string, element) {
+            return !string.match(/\./g);
+        }, "Your username contains a dot!");*/
+        /*$.validator.addMethod('featuredImageSelectedOrNot', function(value, element, param) {
             // param = size (in bytes)
             // element = element to validate (<input>)
             // value = value of the element (file name)
             // return this.optional(element) || (element.files[0].size <= param)
-            var streamName  =   $('#stream_name').val()
+            var streamName  =   $('#stream_name').val();
             var imgName     =   $('#featured_image_name').val();
-            var imgAlt      =   $('#featured_image_alt').val()
+            var imgAlt      =   $('#featured_image_alt').val();
             var imgDesc     =   $('#featured_image_desc').val();
+
             var img         =   '';
 
            if($('#featured_image').val()!=''){
@@ -167,9 +170,8 @@ $(function() {
                return true;
             }
 
-        },"Required an image to upload");
-
-        $.validator.addMethod('thumbImageSelectedOrNot', function(value, element, param) {
+        },"Required an image to upload");*/
+       /* $.validator.addMethod('thumbImageSelectedOrNot', function(value, element, param) {
             // param = size (in bytes)
             // element = element to validate (<input>)
             // value = value of the element (file name)
@@ -200,47 +202,60 @@ $(function() {
                 return true;
             }
 
-        },"Required an image to upload");
+        },"Required an image to upload");*/
 
-        $("#addStreamForm").validate({
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+
+            //return arg !== value;
+            return value!=0;
+        }, "Please select a Course Category.");
+
+        $("#addCoursesForm").validate({
             rules: {
                 // simple rule, converted to {required:true}
-                stream_name: {
-                    required: function(){
-                        return true
-                    },
+                id_category: {
+                    valueNotEquals: "default"
+                },
+                courses_name :{
+                    required : true
                 },
                 // featured_image: { required: true, extension: "png|jpe?g|gif", filesize: 1048576  }
                 featured_image : {
-                    featuredImageSelectedOrNot:true
+                    //featuredImageSelectedOrNot:true
                 },
                 thumb_image : {
-                    thumbImageSelectedOrNot:true
+                    //thumbImageSelectedOrNot:true
+                },
+                featured_image_name : {
+                    alphanumeric : true
+                },
+                thumb_image_name : {
+                    alphanumeric : true
                 }
 
 
             },
             messages: {
-                stream_name: {
-                    required: "Required Stream Name"
+                courses_name :{
+                    required: "Required a Course Name."
                 },
+                featured_image_name: {
+                    alphanumeric: "Special characters / White spaces are not allowed"
+                },
+                thumb_image_name: {
+                    alphanumeric: "Special characters / White spaces are not allowed"
+                }
 
             },
             errorPlacement: function(error, element) {
-              /*  if (element.attr("name") == "stream_name" || element.attr("name") == "lname" ) {
-                    error.insertAfter("#stream_name");
-                } else {
-                    error.insertAfter(element);
-                }*/
-
-                if(element.attr('type') == "text"){
-                    //element.closest('form-group').last();
-                    error.insertAfter(element.parent().find('label').last())
-                    //console.log(element.parent().find('span').append())
-                    //error.insertAfter('span')
+                if(element.attr('type') == "text" ){
+                    error.insertAfter(element.parent().find('label').last());
                 }
                 if(element.attr('type') == 'file'){
                     error.insertAfter(element);
+                }
+                if ( element.is('select') ){
+                  error.insertAfter(element.parent().find('label'));
                 }
 
             },
@@ -261,8 +276,8 @@ $(function() {
     runDescriptionTextEditor();
     runFeaturedImageUpload();
     //runSaveButtonEnableDisable();
-    runFeaturedThumbImageUpload();
-    runStreamValidation();
+    //runFeaturedThumbImageUpload();
+    runCoursesValidation();
 
 
 });

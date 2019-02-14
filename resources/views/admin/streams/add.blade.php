@@ -41,13 +41,8 @@
 
                                     <div class="tab-pane  active" id="contents" role="tabpanel">
                                         <div class="p-20">
-
                                             <div class="form-group m-b-40 m-t-40">
-
-
                                                 {!! Form::text('stream_name', $streamData["streamName"], ['class' => 'form-control','id'=>'stream_name']) !!}
-
-                                                {{--<input type="text" class="form-control" id="stream_name" name="stream_name">--}}
                                                 <span class="bar"></span>
                                                 <label for="stream_name">Stream Name <span class="text-danger">*</span></label>
                                             </div>
@@ -129,50 +124,55 @@
                                     <div class="tab-pane p-20" id="images" role="tabpanel">
                                         <div class="form-group m-b-40 m-t-40">
                                             <h3 class="card-title">Featured Image Upload </h3>
-                                            {{--<label for="input-file-max-fs">You can add a max file size</label>--}}
-                                            {{--<input type="file" name="featured_image" id="featured_image" class="dropify"  data-max-file-size="2M" />--}}
-
                                         </div>
+                                        @if(!empty($streamData['featuredImage']))
+                                            <div class="form-group m-b-40 m-t-40">
+                                                <img src="../{{$streamData['featuredImage']}}" height="250" width="auto" class="feature_preview">
+                                            </div>
+                                        @endif
+
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('featured_image_name', '', ['class' => 'form-control ','id'=>'featured_image_name']) !!}
+                                            {!! Form::text('featured_image_name', $streamData['featuredImgName'], ['class' => 'form-control ','id'=>'featured_image_name']) !!}
                                             <span class="bar"></span>
                                             <label for="featured_image_name">Image Name</label>
                                         </div>
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('featured_image_alt', '', ['class' => 'form-control ','id'=>'featured_image_alt']) !!}
+                                            {!! Form::text('featured_image_alt', $streamData['featuredImgAlt'], ['class' => 'form-control ','id'=>'featured_image_alt']) !!}
                                             <span class="bar"></span>
-                                            <label for="featured_image_alt">Alternate</label>
+                                            <label for="featured_image_alt">Alternative</label>
                                         </div>
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('featured_image_desc', '', ['class' => 'form-control ','id'=>'featured_image_desc']) !!}
+                                            {!! Form::text('featured_image_desc', $streamData['featuredImgDesc'], ['class' => 'form-control ','id'=>'featured_image_desc']) !!}
                                             <span class="bar"></span>
                                             <label for="featured_image_desc">Description</label>
                                         </div>
                                         <div class="form-group m-b-40 m-t-40">
-                                            <input type="file" name="featured_image" id="featured_image" class="dropify"  data-max-file-size="2M" value="<img src='../public/assets/images/users/2.jpg'></img>" />
-
+                                            <input type="file" name="featured_image" id="featured_image" class="dropify"  data-max-file-size="2M" />
                                         </div>
 
                                         <span class="p-20"></span>
 
                                         <div class="form-group m-b-40 m-t-40">
                                             <h3 class="card-title">Thumb Image Upload </h3>
-                                            {{--<label for="input-file-max-fs">You can add a max file size</label>--}}
-                                            {{--<input type="file" name="featured_image" id="featured_image" class="dropify"  data-max-file-size="2M" />--}}
-
                                         </div>
+                                        @if(!empty($streamData['thumbImage']))
+                                            <div class="form-group m-b-40 m-t-40">
+                                                <img src="../{{$streamData['thumbImage']}}" height="250" width="auto" class="thumb_preview">
+                                            </div>
+                                        @endif
+
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('thumb_image_name', '', ['class' => 'form-control ','id'=>'thumb_image_name']) !!}
+                                            {!! Form::text('thumb_image_name', $streamData['thumbImgName'], ['class' => 'form-control ','id'=>'thumb_image_name']) !!}
                                             <span class="bar"></span>
                                             <label for="thumb_image_name">Image Name</label>
                                         </div>
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('thumb_image_alt', '', ['class' => 'form-control ','id'=>'thumb_image_alt']) !!}
+                                            {!! Form::text('thumb_image_alt',  $streamData['thumbImgAlt'], ['class' => 'form-control ','id'=>'thumb_image_alt']) !!}
                                             <span class="bar"></span>
-                                            <label for="thumb_image_alt">Alternate</label>
+                                            <label for="thumb_image_alt">Alternative</label>
                                         </div>
                                         <div class="form-group m-b-40">
-                                            {!! Form::text('thumb_image_desc', '', ['class' => 'form-control ','id'=>'thumb_image_desc']) !!}
+                                            {!! Form::text('thumb_image_desc',  $streamData['thumbImgDesc'], ['class' => 'form-control ','id'=>'thumb_image_desc']) !!}
                                             <span class="bar"></span>
                                             <label for="thumb_image_desc">Description</label>
                                         </div>
@@ -211,7 +211,7 @@
 
         </div>
 
-        <footer class="footer"> © 2017 Admin Press Admin by themedesigner.in </footer>
+        @include('layouts.footer.footer_text')
 
     </div>
 
@@ -224,10 +224,10 @@
     <script src="https://cdn.jsdelivr.net/npm/tinymce@5.0.0/tinymce.min.js"></script>
     <script src="../public/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     <script src="../public/assets/js/jquery.validate.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
 
 
     {{--<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js"></script>--}}
-    <script src="../public/assets/js/admin/streams-add.js"></script>
+    <script src="../public/assets/js/admin/streams/streams-add.js"></script>
 
 @endsection

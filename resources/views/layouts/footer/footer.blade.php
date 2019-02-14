@@ -38,6 +38,8 @@
 <!-- ============================================================== -->
 <script type="text/javascript" src="{!! asset('public/assets/plugins/styleswitcher/jQuery.style.switcher.js') !!}"></script>
 
+<script type="text/javascript" src="{!! asset('public/assets/plugins/sweetalert/sweetalert.min.js') !!}"></script>
+
 
 <script>
     setInterval(function()

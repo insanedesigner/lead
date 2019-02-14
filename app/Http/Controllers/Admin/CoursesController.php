@@ -28,81 +28,22 @@ use App\Classes\DBUtilities;
 use App\Classes\FileUploadUtilities;
 use App\Classes\AuditUtilities;
 
-class AdminController extends Controller
+//Controllers
+use App\Http\Controllers\Common\CommonController;
+
+class CoursesController extends Controller
 {
 
     public function __construct()
     {
         //$this->middleware('guest')->except('logout');
+        $this->commonControllerObj  =   new CommonController();
     }
-
-    /*public function showAddRole(){
-        $role   =   Session::get('users.role')[0];
-        $idRole =   Session::get('users.idRole')[0];
-
-        $paramArray         =   [
-            'pageBase'     =>  'Home',
-            'pageTitle'    =>  'Add Role',
-            'role'         =>   $role,
-            'idRole'       =>   $idRole
-        ];
-
-        return view('admin.roles.add',$paramArray);
-
-    }*/
-
-    //Starts: Dashboard Management Section
-    //-----------------------------------------------------------------------------
-    public function showDashboard(Request $request){
-       /* $role       =   Session::get('users.role')[0];
-        $idRole     =   Session::get('users.idRole')[0];
-        $idUser     =   Session::get('users.idUser')[0];
-        $urlData    =   DBUtilities::getActiveUrl($idRole, 1);
-        $userData   =   DBUtilities::getUserInformation($idUser);
-
-
-        $paramArray         =   [
-            'pageBase'     =>  'Home',
-            'pageTitle'    =>  'Dashboard',
-            'role'         =>   $role,
-            'idRole'       =>   $idRole,
-            'urlData'      =>   $urlData,
-            'userData'     =>   $userData
-        ];
-
-        return view('admin.dashboard',$paramArray);*/
-
-        $idUser     =   Session::get('users.idUser')[0];
-        $userData   =   DBUtilities::getUserInformation($idUser);
-
-        $paramArray         =   [
-            'pageBase'     =>  'Home',
-            'pageTitle'    =>  'Dashboard',
-            'browserTitle' =>   'Dashboard',
-            'role'         =>   'ad',
-            'idRole'       =>   1,
-            'urlData'      =>   "admin/dashboard",
-            'userData'     =>   $userData,
-            'idScreen'     =>   1
-        ];
-
-        return view('admin.dashboard',$paramArray);
-
-
-
-
-    }
-    //-----------------------------------------------------------------------------
-    //Ends: Dashboard Management Section
-
-
-
-
-    //Starts: Course Management Section
-    //-----------------------------------------------------------------------------
     public function showCourses(Request $request){
         $role   =   1;
         $idRole =   1;
+
+
 
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
@@ -110,6 +51,7 @@ class AdminController extends Controller
         $categoryData       =   CategoryModel::select('id', 'category_name')->where('status','=','Enable')->pluck('category_name','id')->toArray();;
         $coursesData        =   "";
         $idCategory         =   "";
+        $idCourses          =   "";
         $featuredImageData  =   "";
         $thumbImageData     =   "";
         $coursesName        =   "";
@@ -138,6 +80,7 @@ class AdminController extends Controller
 
         }
 
+
         if(!empty($coursesData)){
             if(!empty($featuredImageData)){
                 $featuredImage      =   $featuredImageData->base_path.$featuredImageData->bucket_name.$featuredImageData->filename;
@@ -153,6 +96,7 @@ class AdminController extends Controller
             }
 
             $coursesData    =   [
+                'idCourses'         =>  $request->id_courses,
                 'idCategory'        =>  $coursesData->id_courses_category,
                 'coursesName'       =>  $coursesData->course_name,
                 'pageHeading'       =>  $coursesData->page_heading,
@@ -178,6 +122,7 @@ class AdminController extends Controller
         }
         else{
             $coursesData    =   [
+                'idCourses'         =>  "",
                 'idCategory'        =>  "",
                 'coursesName'       =>  "",
                 'pageHeading'       =>  "",
@@ -305,17 +250,17 @@ class AdminController extends Controller
                     'meta_keywords'         =>  $keywords,
                     'url'                   =>  $url,
                     'meta_description'      =>  $desc,
-                    'active_status'         =>  $status,
-                    'modified_by'           =>  $idUser,
+                    'status'                =>  $status,
+                    'edited_by'             =>  $idUser,
                     'admin_notes'           =>  $adminNotes,
-                    'modified_date'         =>  date('Y-m-d h:i"s')
+                    'edited_date'           =>  date('Y-m-d h:i"s')
                 ];
 
                 $data =   CoursesModel::where('id','=',$id)->update($dataArray);
 
                 if(!empty($data)){
-                    $featuredImageUploadStatus  =   $this->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
+                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
+                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
 
 
                     //Audit Entry
@@ -363,8 +308,8 @@ class AdminController extends Controller
 
                 if(!empty($data->id)){
                     $id =   $data->id;
-                    $featuredImageUploadStatus  =   $this->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
+                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
+                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
 
                     //Audit Entry
                     //------------------------------------------------------------------
@@ -398,7 +343,7 @@ class AdminController extends Controller
     public function coursesDescriptionImageUpload(){
         $bucketName     =   "courses/description/";
         $category       =   10;
-        $uploadStatus   =   $this->descriptionImageUpload($bucketName, $category, $_FILES['file'], 'jscript');
+        $uploadStatus   =   $this->commonControllerObj->descriptionImageUpload($bucketName, $category, $_FILES['file'], 'jscript');
         return $uploadStatus;
     }
     public function showViewCourses(){
@@ -410,14 +355,14 @@ class AdminController extends Controller
         $userData       =   DBUtilities::getUserInformation($idUser);
         $ed             =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
         $courseFullData =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-                                            ->select('c.category_name','courses.*')
-                                            ->get();
+            ->select('c.category_name','courses.*')
+            ->get();
         $courseActive   =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-                                            ->select('c.category_name','courses.*')
-                                            ->where('courses.status','=','Enable')->get();
+            ->select('c.category_name','courses.*')
+            ->where('courses.status','=','Enable')->get();
         $courseInactive =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-                                            ->select('c.category_name','courses.*')
-                                            ->where('courses.status','=','Disable')->get();
+            ->select('c.category_name','courses.*')
+            ->where('courses.status','=','Disable')->get();
 
 
         $paramArray         =   [
@@ -466,148 +411,6 @@ class AdminController extends Controller
             return json_encode("invalid_user");
         }
     }
-
-    //-----------------------------------------------------------------------------
-    //Ends: Course Category Management Section
-
-
-
-    //Starts: Common Functionalities
-    //-----------------------------------------------------------------------------
-    public function descriptionImageUpload($bucketName, $category, $image, $scriptType){
-        $basePath       =   "public/assets/images/";
-        $targetDir      =   $basePath.$bucketName;
-        $uploadStatus   =   FileUploadUtilities::imageUploader($targetDir,$image, $category,$scriptType);
-
-        return $uploadStatus;
-
-        //        echo json_encode(array('location' => $filetowrite));
-    }
-    public function featuredImageUpload($bucketName, $category, $uid, $image)
-    {
-        $basePath       =   "public/assets/images/";
-        $targetPath     =   $basePath . $bucketName;
-        $alternative    =   $image['alt'];
-        $description    =   $image['desc'];
-
-        $featuredImgExistCheck      =    GalleryModel::where('uid','=',$uid)->where('category','=',$category)->first();
-        $uploadStatus               =    FileUploadUtilities::imageUploader($targetPath, $image, $category, 'pscript');
-
-        if ($uploadStatus['status'] == 'upload_success') {
-            if(!empty($featuredImgExistCheck)){
-                $dataArray = [
-                    'base_path'     =>  $basePath,
-                    'bucket_name'   =>  $bucketName,
-                    'filename'      =>  $uploadStatus['filename'],
-                    'uid'           =>  $uid,
-                    'category'      =>  $category,
-                    'alternative'   =>  $alternative,
-                    'description'   =>  $description,
-                    'edited_date'   =>  date('Y-m-d h:i:s')
-                ];
-
-                if(!empty($image['name'])){
-                    GalleryModel::where('uid','=',$uid)->where('category','=',$category)->update($dataArray);
-                }
-
-            }
-            else{
-                $dataArray = [
-                    'base_path'     =>  $basePath,
-                    'bucket_name'   =>  $bucketName,
-                    'filename'      =>  $uploadStatus['filename'],
-                    'uid'           =>  $uid,
-                    'category'      =>  $category,
-                    'alternative'   =>  $alternative,
-                    'description'   =>  $description,
-                    'created_date'  =>  date('Y-m-d h:i:s')
-                ];
-
-                if(!empty($image['name'])){
-                    GalleryModel::insert($dataArray);
-                }
-
-            }
-
-        }
-    }
-    public function thumbImageUpload($bucketName, $category, $uid, $image)
-    {
-
-        $basePath       =   "public/assets/images/";
-        $targetPath     =   $basePath.$bucketName;
-        $alternative    =   $image['alt'];
-        $description    =   $image['desc'];
-
-        $thumbImgExistCheck =   GalleryModel::where('uid','=',$uid)->where('category','=',$category)->first();
-        $uploadStatus       =   FileUploadUtilities::imageUploader($targetPath, $image, $category,'pscript');
-
-
-        if ($uploadStatus['status'] == 'upload_success') {
-            if(!empty($thumbImgExistCheck)){
-                $dataArray = [
-                    'base_path'     =>  $basePath,
-                    'bucket_name'   =>  $bucketName,
-                    'filename'      =>  $uploadStatus['filename'],
-                    'uid'           =>  $uid,
-                    'category'      =>  $category,
-                    'alternative'   =>  $alternative,
-                    'description'   =>  $description,
-                    'edited_date'  =>  date('Y-m-d h:i:s')
-                ];
-                GalleryModel::where('uid','=',$uid)->where('category','=',$category)->update($dataArray);
-            }
-            else{
-                $dataArray = [
-                    'base_path'     =>  $basePath,
-                    'bucket_name'   =>  $bucketName,
-                    'filename'      =>  $uploadStatus['filename'],
-                    'uid'           =>  $uid,
-                    'category'      =>  $category,
-                    'alternative'   =>  $alternative,
-                    'description'   =>  $description,
-                    'created_date'  =>  date('Y-m-d h:i:s')
-                ];
-                $save   =   GalleryModel::insert($dataArray);
-
-            }
-
-        }
-
-
-    }
-    //-----------------------------------------------------------------------------
-    //Ends: Common Functionalities
-
-
-    //Starts: Ajax Calls
-    //---------------------------------------------------------------------------
-    public function loadCoursesCategory(Request $request){
-
-        $cousesCategoryData = CategoryModel::join('streams As s','s.id','=','courses_categories.id_stream')->get();
-
-        $jsonData = array(
-            "draw"            => intval( $_REQUEST['draw'] ),
-            "recordsTotal"    => count($cousesCategoryData),
-            "recordsFiltered" => 5,
-            "data"            => $cousesCategoryData
-        );
-        echo json_encode($jsonData);
-
-    }
-    //---------------------------------------------------------------------------
-    //Ends: Ajax Calls
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
