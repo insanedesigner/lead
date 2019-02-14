@@ -81,7 +81,6 @@
                                             <span class="bar"></span>
                                             <label for="url">Url</label>
                                         </div>
-
                                         <div class="form-group m-b-40">
                                             {!! Form::textarea('desc', $coursesData['description'], ['class' => 'form-control','rows'=>4,'id'=>'desc']) !!}
                                             <span class="bar"></span>
