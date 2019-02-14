@@ -58,7 +58,6 @@
                                             <span class="bar"></span>
                                             <label for="tagline">Tagline</label>
                                         </div>
-
                                         <div class="form-group m-b-40">
                                             {!! Form::textarea('desc1', $coursesData['desc1'], ['class' => 'form-control','rows'=>10,'id'=>'desc1']) !!}
                                         </div>
