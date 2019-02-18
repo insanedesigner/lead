@@ -17,6 +17,8 @@
     $viewCoursesActive      =   "";
     $addUniversityActive    =   "";
     $viewUniversityActive   =   "";
+    $mediaUniversityActive  =   "";
+
     //$idScreen           =   "";
 
 
@@ -61,6 +63,10 @@
                 case 11:
                     $viewUniversityActive  =    "active";
                     break;
+                case 12:
+                    $mediaUniversityActive  =    "active";
+                    break;
+
 
 
 
@@ -122,6 +128,7 @@
                 <ul aria-expanded="false" class="collapse">
                     <li class="{{$addUniversityActive }}"><a class="{{$addUniversityActive}}" href="university">Add</a></li>
                     <li class="{{$viewUniversityActive}}"><a class="{{$viewUniversityActive}}" href="manage_university">Manage </a></li>
+                    <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}" href="media_university">Media Uploads </a></li>
                 </ul>
             </li>
 

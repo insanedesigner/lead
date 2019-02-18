@@ -24,6 +24,11 @@ Route::post('/loadCoursesCategory', 'Admin\AdminController@loadCoursesCategory')
 Route::post('/handleCoursesCategoryStatusChange', 'Admin\CoursesCategoryController@handleCoursesCategoryStatusChange')->name('handleCoursesCategoryStatusChange');
 Route::post('/coursesDescriptionImageUpload', 'Admin\CoursesController@coursesDescriptionImageUpload')->name('coursesDescriptionImageUpload');
 Route::post('/handleCoursesStatusChange', 'Admin\CoursesController@handleCoursesStatusChange')->name('handleCoursesStatusChange');
+Route::post('/loadCoursesDetails', 'Common\CommonController@loadCoursesDetails')->name('loadCoursesDetails');
+Route::post('/universityDescriptionImageUpload', 'Admin\UniversityController@universityDescriptionImageUpload')->name('universityDescriptionImageUpload');
+Route::post('/loadStateOnCountries', 'Common\CommonController@loadStateOnCountries')->name('loadStateOnCountries');
+Route::post('/loadCityOnStates', 'Common\CommonController@loadCityOnStates')->name('loadCityOnStates');
+Route::post('/handleUniversityStatusChange', 'Admin\UniversityController@handleUniversityStatusChange')->name('handleUniversityStatusChange');
 
 
 //Route::post('/testAjax', 'Admin\AdminController@streamDescriptionImageUploader')->name('streamImageUploader');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Models\Common\CitiesModel;
+use App\Models\Common\StatesModel;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -128,6 +130,51 @@ class CommonController extends Controller
 
             }
 
+        }
+
+
+    }
+
+    public function loadCoursesDetails(){
+        $coursesData    =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
+            ->select('c.category_name','courses.course_name')
+            ->orderBy('c.category_name','ASC')
+            ->get();
+
+        $coursesArray   =   [];
+            foreach($coursesData as $index=>$key){
+                $categoryName   =   $key['category_name'];
+                $courseName     =   $key['course_name'];
+                $courses        =   $categoryName." - ".$courseName;
+                    array_push($coursesArray, $courses);
+            }
+        return json_encode($coursesArray);
+    }
+
+    public function loadStateOnCountries(Request $request){
+        $idCountry  =   $request->id_country;
+        $states     =   "";
+
+        if(isset($idCountry)){
+            $states =   StatesModel::where('country_id','=',$idCountry)->select('id','name')->get();
+            return json_encode($states);
+        }
+        else{
+            return json_encode('error');
+        }
+
+
+    }
+    public function loadCityOnStates(Request $request){
+        $idState  =   $request->id_state;
+        $cities   =   "";
+
+        if(isset($idState)){
+            $cities =   CitiesModel::where('state_id','=',$idState)->select('id','name')->get();
+            return json_encode($cities);
+        }
+        else{
+            return json_encode('error');
         }
 
 
