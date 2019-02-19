@@ -135,6 +135,14 @@ class CommonController extends Controller
 
     }
 
+    public function logoImageUploads($basePath, $bucketName, $category, $image, $scriptType){
+        $targetDir                  =   $basePath.$bucketName;
+        $uploadStatus               =   FileUploadUtilities::imageUploader($targetDir,$image, $category,$scriptType);
+        $uploadStatus['base_path']  =   $basePath;
+
+        return $uploadStatus;
+    }
+
     public function loadCoursesDetails(){
         $coursesData    =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
             ->select('c.category_name','courses.course_name')

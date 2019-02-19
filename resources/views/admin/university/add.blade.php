@@ -35,8 +35,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body p-b-0"> </div>
-                        @include('includes.alert_message.alert_message',['error' => Session::get('error'), 'success' => Session::get('success')])
+                        <div class="card-body p-b-0">
+                            @include('includes.alert_message.alert_message',['error' => Session::get('error'), 'success' => Session::get('success')])
+
+                        </div>
 
                     <!-- Nav tabs -->
                         <ul class="nav nav-tabs customtab" role="tablist">

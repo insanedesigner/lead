@@ -10,6 +10,7 @@ use App\Models\Common\RolesModel;
 use App\Models\Common\ScreenRolesMapModel;
 
 
+
 class DBUtilities{
     public static function getUserInformation($idUser){
         if(!empty($idUser)){

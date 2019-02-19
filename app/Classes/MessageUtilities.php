@@ -29,6 +29,16 @@ class MessageUtilities{
 
         return $message;
     }
+    public static function invalidMessages($filedNames){
+        $message    =   ['error' => 'Invalid '.$filedNames];
+
+        return $message;
+    }
+
+    public static function uploadFailed(){
+        $message    =   ['error' => 'Failed to upload data.'];
+        return $message;
+    }
 }
 
 

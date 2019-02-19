@@ -35,8 +35,8 @@ Route::any('admin/viewcourses', 'Admin\CoursesController@showViewCourses')->name
 Route::any('admin/university', 'Admin\UniversityController@showAddUniversity')->name('showAddUniversity')->middleware('validuser');
 Route::any('admin/handleAddUniversity', 'Admin\UniversityController@handleAddUniversity')->name('handleAddUniversity')->middleware('validuser');
 Route::any('admin/manage_university', 'Admin\UniversityController@showManageUniversity')->name('showManageUniversity')->middleware('validuser');
-
 Route::any('admin/media_university', 'Admin\UniversityController@showMedia')->name('showMedia')->middleware('validuser');
+Route::any('admin/handleLogoUploads', 'Admin\UniversityController@handleLogoUploads')->name('handleLogoUploads')->middleware('validuser');
 
 
 
