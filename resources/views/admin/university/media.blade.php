@@ -8,6 +8,9 @@
         .error{
             color:red;
         }
+        .dropify-wrapper{
+            margin-top:16px;
+        }
     </style>
 
 @endsection
