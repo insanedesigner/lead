@@ -43,7 +43,7 @@ $(function() {
                                 '<input type="file" name="file[]" id="image'+idDiv+'" class="dropify"  data-max-file-size="2M" />'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<a href="" class="btn waves-effect waves-light btn-rounded btn-outline-danger remove" id="remove'+idDiv+'">Remove</a>'+
+                                '<a href="" class="btn waves-effect waves-light btn-rounded btn-outline-danger remove" id="remove'+idDiv+'"><i class="fa fa-times"> Remove </i></a>'+
                             '</div>'+
                         '</div>'+
                         '<div class="col-sm-6">'+
@@ -63,7 +63,7 @@ $(function() {
                                 '<label for="image_desc'+idDiv+'">Description</label>'+
                             '</div>'+
                             '<div class="form-group text-right">'+
-                                '<a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new'+idDiv+'">Add New</a>'+
+                                '<a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new'+idDiv+'"><i class="fa fa-plus"> Add New </i></a>'+
                             '</div>'+
                         '</div>'+
                         '<span class="p-20"></span>'+
@@ -105,7 +105,7 @@ $(function() {
 
             //adding the add new button when deleting all the extra divs
             if(divCount==2){
-                var string  =   '<a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new">Add New</a>';
+                var string  =   '<a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new"><i class="fa fa-plus"> Add New </i></a>';
                 $('.add_btn_div').append(string);
                 //triggering add new
                 runMediaAddNew();

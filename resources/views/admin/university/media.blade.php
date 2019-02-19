@@ -118,7 +118,7 @@
                                                             <label for="image_desc1">Description</label>
                                                         </div>
                                                         <div class="form-group text-right add_btn_div">
-                                                            <a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new">Add New</a>
+                                                            <a href="" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new"><i class="fa fa-plus"> Add New </i></a>
                                                             {{--<input  type="button" class="btn btn-blue waves-effect waves-light btn-rounded btn-outline-warning add_new" id="add_new" style="border-color:none" value="Add New"/>--}}
                                                         </div>
                                                     </div>
