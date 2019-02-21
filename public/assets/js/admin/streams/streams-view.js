@@ -70,19 +70,7 @@ $(function() {
             e.preventDefault();
             $('#id_stream').val($(this).attr('data-value'));
 
-            swal({
-                title: "Are you sure?",
-                text: "",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                closeOnConfirm: false
-            }, function(){
-                //swal("Bingo!", "Your status has been updated.", "success");
-                $('#streamEditForm').submit();
-            });
-
+            $('#streamEditForm').submit();
 
 
 

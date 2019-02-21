@@ -68,20 +68,9 @@ $(function() {
         $('.edit_btn').click(function(e){
             e.preventDefault();
             $('#id_courses_data').val($(this).attr('data-value'));
+            $('#coursesEditDataForm').submit();
 
 
-            swal({
-                title: "Are you sure?",
-                text: "",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                closeOnConfirm: false
-            }, function(){
-
-                $('#coursesEditDataForm').submit();
-            });
         })
     }
 

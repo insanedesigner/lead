@@ -37,6 +37,8 @@ Route::any('admin/handleAddUniversity', 'Admin\UniversityController@handleAddUni
 Route::any('admin/manage_university', 'Admin\UniversityController@showManageUniversity')->name('showManageUniversity')->middleware('validuser');
 Route::any('admin/media_university', 'Admin\UniversityController@showMedia')->name('showMedia')->middleware('validuser');
 Route::any('admin/handleLogoUploads', 'Admin\UniversityController@handleLogoUploads')->name('handleLogoUploads')->middleware('validuser');
+Route::any('admin/handleUniversityImagesUploads', 'Admin\UniversityController@handleUniversityImagesUploads')->name('handleUniversityImagesUploads')->middleware('validuser');
+Route::any('admin/handleUniversityBroucherUploads', 'Admin\UniversityController@handleUniversityBroucherUploads')->name('handleUniversityBroucherUploads')->middleware('validuser');
 
 
 

@@ -12,6 +12,7 @@ class Utilities{
     }
 
     public static function folderExistCheck($targetPath){
+
         if (!file_exists($targetPath)) {
             mkdir($targetPath, 0777, true);
         }

@@ -177,6 +177,8 @@ $(function() {
         runLoadCity(dataString, event);
 
 
+
+
         $('.state').change(function() {
             var idState     =   $(this).val();
             var dataString  =   'id_state=' + idState;
@@ -212,6 +214,7 @@ $(function() {
                     }
 
                     if(event == "default"){
+                        alert('ds');
                         stateSelected   =   $('#state_hidden').val();
                         $(".state option[value="+stateSelected+"]").attr('selected','selected');
                     }

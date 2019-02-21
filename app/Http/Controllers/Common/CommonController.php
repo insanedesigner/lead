@@ -113,6 +113,9 @@ class CommonController extends Controller
                     'description'   =>  $description,
                     'edited_date'  =>  date('Y-m-d h:i:s')
                 ];
+
+
+
                 GalleryModel::where('uid','=',$uid)->where('category','=',$category)->update($dataArray);
             }
             else{
@@ -136,6 +139,15 @@ class CommonController extends Controller
     }
 
     public function logoImageUploads($basePath, $bucketName, $category, $image, $scriptType){
+        $targetDir                  =   $basePath.$bucketName;
+        $uploadStatus               =   FileUploadUtilities::imageUploader($targetDir,$image, $category,$scriptType);
+        $uploadStatus['base_path']  =   $basePath;
+
+        return $uploadStatus;
+    }
+    public function galleryImageUploads($basePath, $bucketName, $category, $image, $scriptType){
+
+
         $targetDir                  =   $basePath.$bucketName;
         $uploadStatus               =   FileUploadUtilities::imageUploader($targetDir,$image, $category,$scriptType);
         $uploadStatus['base_path']  =   $basePath;
@@ -187,4 +199,15 @@ class CommonController extends Controller
 
 
     }
+
+    public function documentUploads($basePath, $bucketName, $category, $image, $scriptType){
+
+
+        $targetDir                  =   $basePath.$bucketName;
+        $uploadStatus               =   FileUploadUtilities::documentUploader($targetDir,$image, $category,$scriptType);
+        $uploadStatus['base_path']  =   $basePath;
+
+        return $uploadStatus;
+    }
+
 }

@@ -70,19 +70,7 @@ $(function() {
 
             $('#id_category').val($(this).attr('data-value'));
 
-
-            swal({
-                title: "Are you sure?",
-                text: "",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                closeOnConfirm: false
-            }, function(){
-
-                $('#coursesCategoryEditForm').submit();
-            });
+            $('#coursesCategoryEditForm').submit();
 
 
         })

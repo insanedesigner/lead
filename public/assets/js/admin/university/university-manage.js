@@ -69,22 +69,7 @@ $(function() {
             e.preventDefault();
 
             $('#id').val($(this).attr('data-value'));
-
-
-            swal({
-                title: "Are you sure?",
-                text: "",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes",
-                closeOnConfirm: false
-            }, function(){
-
-                $('#universityEditForm').submit();
-            });
-
-
+            $('#universityEditForm').submit();
         })
     }
 

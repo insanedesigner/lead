@@ -78,8 +78,8 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ Form::open(array('url'=>'admin/courses','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
-                                                        {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
+                                                        {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
+                                                        {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
 
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
@@ -147,8 +147,8 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ Form::open(array('url'=>'admin/courses','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
-                                                        {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
+                                                        {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
+                                                        {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
 
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
@@ -219,6 +219,7 @@
                                                     <td>
                                                         {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
                                                             {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
+
                                                             <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
                                                         {{ Form::close() }}
                                                     </td>

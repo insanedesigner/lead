@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 use Crypt;
+use DB;
 
 //Models
 use App\Models\Auth\LoginModel;
@@ -84,6 +85,8 @@ class UniversityController extends Controller
         array_unshift($countries, "Select a country");
         array_unshift($states, "Select a state");
         array_unshift($cities, "Select a city");
+
+
 
         if(isset($request->id)){
 
@@ -238,10 +241,15 @@ class UniversityController extends Controller
         $idUser                 =   Session::get('users.idUser')[0];
         $ipaddress              =   $_SERVER['SERVER_ADDR'];
         $imageUploadStatus      =   "";
-        $featuredBucketName     =   "university/featuredimage/";
-        $thumbBucketName        =   "university/thumbimage/";
         $featuredCategory       =   12;
         $thumbCategory          =   13;
+
+
+        
+
+
+        
+        
 
         //Contents
         $universityName =   ucwords($request->university_name);
@@ -346,8 +354,27 @@ class UniversityController extends Controller
 
                 if(!empty($data)){
 
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $request->id_university, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $request->id_university, $_FILES['thumb_image']);
+                    $feauredMediaCategory  =   MediaCategoryModel::where('id','=',12)->select('base_path')->first();
+                    $thumbMediaCategory    =   MediaCategoryModel::where('id','=',13)->select('base_path')->first();
+
+
+                    if(!empty($feauredMediaCategory)){
+                        $basePath       =   $feauredMediaCategory->base_path;
+                        $targetPath     =   $basePath."university/featuredimage/".$request->id;
+                        Utilities::folderExistCheck($targetPath);
+                    }
+                    if(!empty($thumbMediaCategory)){
+                        $basePath       =   $thumbMediaCategory->base_path;
+                        $targetPath     =   $basePath."university/thumbimage/".$request->id;
+                        Utilities::folderExistCheck($targetPath);
+                    }
+
+                    $featuredBucketName     =   "university/featuredimage/".$request->id."/";
+                    $thumbBucketName        =   "university/thumbimage/".$request->id."/";
+
+
+                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $request->id, $_FILES['featured_image']);
+                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $request->id, $_FILES['thumb_image']);
 
 
                     //Audit Entry
@@ -403,6 +430,24 @@ class UniversityController extends Controller
                 $data =   UniversityModel::updateOrCreate($dataArray);
 
                 if(!empty($data->id)){
+
+                    $feauredCategory  =   MediaCategoryModel::where('id','=',12)->select('base_path')->first();
+                    $thumbCategory    =   MediaCategoryModel::where('id','=',13)->select('base_path')->first();
+
+
+                    if(!empty($feauredCategory)){
+                        $basePath       =   $feauredCategory->base_path;
+                        $targetPath     =   $basePath."university/featuredimage/".$data->id;
+                        Utilities::folderExistCheck($targetPath);
+                    }
+                    if(!empty($thumbCategory)){
+                        $basePath       =   $thumbCategory->base_path;
+                        $targetPath     =   $basePath."university/thumbimage/".$data->id;
+                        Utilities::folderExistCheck($targetPath);
+                    }
+
+                    $featuredBucketName     =   "university/featuredimage/".$data->id."/";
+                    $thumbBucketName        =   "university/thumbimage/".$data->id."/";
 
                     $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $data->id, $_FILES['featured_image']);
                     $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $data->id, $_FILES['thumb_image']);
@@ -512,7 +557,7 @@ class UniversityController extends Controller
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
         $ed                 =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value', 'id')->toArray();
-        $universityData     =   UniversityModel::select('id','university_name')->pluck('university_name','id')->toArray();
+        $universityData     =   UniversityModel::select('id','university_name')->where('status','=',0)->pluck('university_name','id')->toArray();
         $logoImageData      =   "";
         $featuredImageData  =   "";
         $thumbImageData     =   "";
@@ -530,9 +575,10 @@ class UniversityController extends Controller
         $thumbImgAlt        =   "";
         $thumbImgDesc       =   "";
 
-        //dd($universityData);
 
-        array_unshift($universityData, "Select a university");
+        $universityData[0] = "Select a university";
+        ksort($universityData);
+
 
         if(isset($request->id_university)){
 
@@ -578,6 +624,8 @@ class UniversityController extends Controller
         if(isset($idUniversity)){
             $category       =   11;
             $mediaCategory  =   MediaCategoryModel::where('id','=',11)->select('base_path')->first();
+
+
 
 
             if(!empty($mediaCategory)){
@@ -643,6 +691,205 @@ class UniversityController extends Controller
 
 
 
+    }
+
+    public function handleUniversityImagesUploads(Request $request){
+
+        $idUser         =   Session::get('users.idUser')[0];
+        $userData       =   DBUtilities::getUserInformation($idUser);
+        $ipaddress      =   $_SERVER['SERVER_ADDR'];
+
+        $divCount       =   $request->media_div_count_hidden;
+        $university     =   $request->university;
+        $dataArray      =   [];
+        $paramArray     =   [];
+
+
+        //Message Section
+        $uploadFailedMsg    =   MessageUtilities::uploadFailed();
+        $saveSuccessMsg     =   MessageUtilities::dataSaveSuccessMessage();
+        $saveFailedMsg      =   MessageUtilities::dataSaveFailedMessage();
+
+        if(!empty($university)){
+            for($i=1;$i<=$divCount;$i++){
+                $imageName  =   $request['image_name'.$i];
+                $imageAlt   =   $request['image_alt'.$i];
+                $imageDesc  =   $request['image_desc'.$i];
+
+                if(isset($imageName)){
+                    $_FILES['file'.$i]['image_new_name'] = $imageName;
+                }
+
+
+                $category       =   14;
+                $mediaCategory  =   MediaCategoryModel::where('id','=',14)->select('base_path')->first();
+
+
+
+                if(!empty($mediaCategory)){
+                    $basePath       =   $mediaCategory->base_path;
+                    $targetPath     =   $basePath."university/gallery/".$university;
+                    Utilities::folderExistCheck($targetPath);
+                }
+
+
+
+
+                $bucketName     =   "university/gallery/".$university."/";
+                $uploadStatus   =   $this->commonControllerObj->galleryImageUploads($basePath, $bucketName, $category, $_FILES['file'.$i], 'pscript');
+
+                if($uploadStatus['status'] == "upload_success"){
+                    $dataArray  =   [
+                        'base_path'     =>  $uploadStatus['base_path'],
+                        'bucket_name'   =>  $bucketName,
+                        'uid'           =>  $university,
+                        'filename'      =>  $uploadStatus['filename'],
+                        'category'      =>  $category,
+                        'alternative'   =>  $imageAlt,
+                        'description'   =>  $imageDesc,
+                        'created_date'  =>  date('Y-m-d h:i:s')
+                    ];
+
+                    array_push($paramArray, $dataArray);
+                }
+                else{
+
+                    return Redirect::route('showMedia')->with($uploadFailedMsg);
+                }
+
+
+
+            }
+
+
+
+            $data   =   GalleryModel::insert($paramArray);
+            if($data){
+                //Audit Entry
+                //------------------------------------------------------------------
+                $paramArray =   [
+                    'id_user'       =>  $idUser,
+                    'audit_event'   =>  'UPLOAD UNIVERSITY GALLERY',
+                    'ip_address'    =>  $ipaddress,
+                    'id_audit'      =>  NULL,
+                    'created_date'  =>  date('Y-m-d h:i:s'),
+                    'edited_date'   =>  NULL
+
+                ];
+                $auditEntry =   AuditUtilities::putAuditInformation($paramArray);
+                //--------------------------------------------------------------------
+
+                return Redirect::route('showMedia')->with($saveSuccessMsg);
+            }
+            else{
+                return Redirect::route('showMedia')->with($saveFailedMsg);
+            }
+        }
+        else{
+            $emptyFiledsMsg =   MessageUtilities::invalidMessages('University');
+            return Redirect::route('showMedia')->with($emptyFiledsMsg);
+        }
+
+
+    }
+
+    public function handleUniversityBroucherUploads(Request $request){
+        $idUser         =   Session::get('users.idUser')[0];
+        $userData       =   DBUtilities::getUserInformation($idUser);
+        $ipaddress      =   $_SERVER['SERVER_ADDR'];
+        $university     =   $request->university;
+        $name           =   $request->name;
+        $description    =   $request->description;
+
+        //Message Section
+        $uploadFailedMsg    =   MessageUtilities::uploadFailed();
+        $saveSuccessMsg     =   MessageUtilities::dataSaveSuccessMessage();
+        $saveFailedMsg      =   MessageUtilities::dataSaveFailedMessage();
+
+        $_FILES['file']['doc_new_name'] =   $name;
+
+        $category       =   16;
+        $mediaCategory  =   MediaCategoryModel::where('id','=',$category)->select('base_path')->first();
+
+
+
+        if(!empty($mediaCategory)){
+            $basePath       =   $mediaCategory->base_path;
+            $targetPath     =   $basePath."university/".$university;
+            Utilities::folderExistCheck($targetPath);
+        }
+
+        $bucketName     =   "university/".$university."/";
+        $uploadStatus   =   $this->commonControllerObj->documentUploads($basePath, $bucketName, $category, $_FILES['file'], 'pscript');
+
+        if($uploadStatus['status'] == "upload_success"){
+            $dataArray  =   [
+                'base_path'     =>  $uploadStatus['base_path'],
+                'bucket_name'   =>  $bucketName,
+                'uid'           =>  $university,
+                'filename'      =>  $uploadStatus['filename'],
+                'category'      =>  $category,
+                'alternative'   =>  NULL,
+                'description'   =>  $description,
+                'created_date'  =>  date('Y-m-d h:i:s')
+            ];
+
+            $data   =   GalleryModel::insert($dataArray);
+            if($data){
+                //Audit Entry
+                //------------------------------------------------------------------
+                $paramArray =   [
+                    'id_user'       =>  $idUser,
+                    'audit_event'   =>  'UPLOAD UNIVERSITY BROUCHER',
+                    'ip_address'    =>  $ipaddress,
+                    'id_audit'      =>  NULL,
+                    'created_date'  =>  date('Y-m-d h:i:s'),
+                    'edited_date'   =>  NULL
+
+                ];
+                $auditEntry =   AuditUtilities::putAuditInformation($paramArray);
+                //--------------------------------------------------------------------
+
+                return Redirect::route('showMedia')->with($saveSuccessMsg);
+            }
+            else{
+                return Redirect::route('showMedia')->with($saveFailedMsg);
+            }
+
+        }
+        else{
+
+            return Redirect::route('showMedia')->with($uploadFailedMsg);
+        }
+
+
+    }
+
+    public function loadMediaForUniversity(Request $request){
+        $idUniversity   =   $request->id;
+
+        if(!empty($idUniversity)){
+            $universityLogoData     =   GalleryModel::where('uid','=',$idUniversity)->where('category','=',11)->orderBy('id','desc')->first();
+            $galleryData            =   GalleryModel::where('uid','=',$idUniversity)->where('category','=',14)->get();
+            $broucherData           =   GalleryModel::where('uid','=',$idUniversity)->where('category','=',16)->get();
+
+
+            $param  =   [
+                'logoData'      =>  $universityLogoData,
+                'galleryData'   =>  $galleryData,
+                'broucherData'  =>  $broucherData,
+            ];
+
+
+
+            return json_encode($param);
+
+
+        }
+        else{
+            $param  =   ['error' => 'Invalid_university'];
+            return json_encode($param);
+        }
     }
 
 }

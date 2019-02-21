@@ -29,6 +29,7 @@ Route::post('/universityDescriptionImageUpload', 'Admin\UniversityController@uni
 Route::post('/loadStateOnCountries', 'Common\CommonController@loadStateOnCountries')->name('loadStateOnCountries');
 Route::post('/loadCityOnStates', 'Common\CommonController@loadCityOnStates')->name('loadCityOnStates');
 Route::post('/handleUniversityStatusChange', 'Admin\UniversityController@handleUniversityStatusChange')->name('handleUniversityStatusChange');
+Route::post('/loadMediaForUniversity', 'Admin\UniversityController@loadMediaForUniversity')->name('loadMediaForUniversity');
 
 
 //Route::post('/testAjax', 'Admin\AdminController@streamDescriptionImageUploader')->name('streamImageUploader');
