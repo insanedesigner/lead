@@ -37,9 +37,15 @@ $(function() {
 
                                 success: function (data) {
                                     if(data == 'success'){
-                                        swal("Bingo!", "Your status has been updated.", "success");
-                                        //$('#active_table').html(data);
-                                        //$( "#active_table" ).load();
+                                        swal({
+                                                title: "Bingo",
+                                                text: "Your status has been updated.",
+                                                type: "success"
+                                            },
+                                            function(){
+                                                window.location.href = 'viewstreams';
+                                            });
+
                                     }
 
                                 }

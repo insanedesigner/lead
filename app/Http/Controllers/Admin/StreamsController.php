@@ -27,6 +27,7 @@ use App\Classes\MessageUtilities;
 use App\Classes\DBUtilities;
 use App\Classes\FileUploadUtilities;
 use App\Classes\AuditUtilities;
+use App\Classes\Utilities;
 
 //Controllers
 use App\Http\Controllers\Common\CommonController;
@@ -47,15 +48,11 @@ class StreamsController extends Controller
 
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
-        $ed                 =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
+        $ed                 =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value')->toArray();
+
         $streamData         =   "";
         $featuredImageData  =   "";
         $thumbImageData     =   "";
-        $streamName         =   "";
-        $pageHeading        =   "";
-        $tagline            =   "";
-        $desc1              =   "";
-        $desc2              =   "";
         $featuredImage      =   "";
         $thumbImage         =   "";
         $featuredImgName    =   "";
@@ -65,15 +62,14 @@ class StreamsController extends Controller
         $thumbImgAlt        =   "";
         $thumbImgDesc       =   "";
 
+
         if(isset($request->id_stream)){
-            //$streamFullData =   StreamsModel::join('gallery As g','streams.id','=','g.uid')->get();
-            $streamData         =   StreamsModel::where('streams.id','=',$request->id_stream)->first();
+            $streamData             =   StreamsModel::where('streams.id','=',$request->id_stream)->first();
             $featuredImageData      =   GalleryModel::where('uid','=',$request->id_stream)->where('category','=',2)->first();
             $thumbImageData         =   GalleryModel::where('uid','=',$request->id_stream)->where('category','=',3)->first();
 
         }
 
-        //dd($featuredImageData);
         if(!empty($streamData)){
             if(!empty($featuredImageData)){
 
@@ -101,7 +97,7 @@ class StreamsController extends Controller
                 'keywords'          =>  $streamData->meta_keywords,
                 'description'       =>  $streamData->meta_description,
                 'url'               =>  $streamData->url,
-                'status'            =>  $streamData->active_status,
+                'status'            =>  $streamData->status,
                 'adminNotes'        =>  $streamData->admin_notes,
                 'featuredImage'     =>  $featuredImage,
                 'featuredImgName'   =>  $featuredImgName,
@@ -125,7 +121,7 @@ class StreamsController extends Controller
                 'keywords'          =>  "",
                 'description'       =>  "",
                 'url'               =>  "",
-                'status'            =>  "",
+                'status'            =>  0,
                 'adminNotes'        =>  "",
                 'featuredImage'     =>  "",
                 'featuredImgName'   =>  "",
@@ -156,6 +152,7 @@ class StreamsController extends Controller
 
 
 
+
         return view('admin.streams.add',$paramArray);
 
     }
@@ -183,7 +180,7 @@ class StreamsController extends Controller
         $desc           =   $request->desc;
 
         //Info
-        $status         =   $request->active_status;
+        $status         =   $request->status;
         $adminNotes     =   $request->admin_notes;
 
         //Images
@@ -206,10 +203,11 @@ class StreamsController extends Controller
 
 
         //Message Section
-        $saveSuccessMsg     =   MessageUtilities::dataSaveSuccessMessage();
-        $saveFailedMsg      =   MessageUtilities::dataSaveFailedMessage();
-        $updateSuccessMsg   =   MessageUtilities::dataUpdateSuccessMessage();
-        $updateFailedMsg    =   MessageUtilities::dataUpdateFailedMessage();
+        $saveSuccessMsg         =   MessageUtilities::dataSaveSuccessMessage();
+        $saveFailedMsg          =   MessageUtilities::dataSaveFailedMessage();
+        $updateSuccessMsg       =   MessageUtilities::dataUpdateSuccessMessage();
+        $updateFailedMsg        =   MessageUtilities::dataUpdateFailedMessage();
+        $invalidMediaCategory   =   MessageUtilities::invalidMediaCategory();
 
 
         if(!empty($streamName)){
@@ -239,19 +237,29 @@ class StreamsController extends Controller
                     'meta_keywords'      =>  $keywords,
                     'url'                =>  $url,
                     'meta_description'   =>  $desc,
-                    'active_status'      =>  $status,
-                    'modified_by'        =>  $idUser,
+                    'status'             =>  $status,
+                    'edited_by'          =>  $idUser,
                     'admin_notes'        =>  $adminNotes,
-                    'modified_date'      =>  date('Y-m-d h:i"s')
+                    'edited_date'        =>  date('Y-m-d H:i:s')
                 ];
 
                 $streamData =   StreamsModel::where('id','=',$request->id_stream)->update($dataArray);
 
                 if(!empty($streamData)){
+                    $_FILES['featured_image']['extra_name'] =   "streams_".$featuredCategory."_".$request->id_stream;
+                    $_FILES['thumb_image']['extra_name']    =   "streams_".$thumbCategory."_".$request->id_stream;
 
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $request->id_stream, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $request->id_stream, $_FILES['thumb_image']);
+                    $featuredBucketStatus =   $this->commonControllerObj->createBucketForMediaStorage($featuredCategory, $featuredBucketName);
+                    $thumbBucketStatus    =   $this->commonControllerObj->createBucketForMediaStorage($thumbCategory, $thumbBucketName);
 
+                    if($featuredBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->featuredImageUpload($featuredBucketStatus['bucket_name'], $featuredCategory, $request->id_stream, $_FILES['featured_image']);
+                    }
+                    if($thumbBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->thumbImageUpload($thumbBucketStatus['bucket_name'], $thumbCategory, $request->id_stream, $_FILES['thumb_image']);
+                    }
 
                     //Audit Entry
                     //------------------------------------------------------------------
@@ -285,19 +293,33 @@ class StreamsController extends Controller
                     'meta_keywords'      =>  $keywords,
                     'url'                =>  $url,
                     'meta_description'   =>  $desc,
-                    'active_status'      =>  $status,
-                    'posted_by'          =>  $idUser,
+                    'status'             =>  $status,
+                    'created_by'          =>  $idUser,
                     'admin_notes'        =>  $adminNotes,
-                    'posted_date'        =>  date('Y-m-d h:i"s'),
-                    'created_date'       =>  date('Y-m-d h:i"s')
+                    'created_date'       =>  date('Y-m-d H:i:s')
                 ];
 
                 $streamData =   StreamsModel::updateOrCreate($dataArray);
 
                 if(!empty($streamData->id)){
+                    $_FILES['featured_image']['extra_name'] =   "streams_".$featuredCategory."_".$streamData->id;
+                    $_FILES['thumb_image']['extra_name']    =   "streams_".$thumbCategory."_".$streamData->id;
 
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $streamData->id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $streamData->id, $_FILES['thumb_image']);
+                    $featuredBucketStatus =   $this->commonControllerObj->createBucketForMediaStorage($featuredCategory, $featuredBucketName);
+                    $thumbBucketStatus    =   $this->commonControllerObj->createBucketForMediaStorage($thumbCategory, $thumbBucketName);
+
+                    if($featuredBucketStatus['response']=="success")
+                    {
+
+                        $this->commonControllerObj->featuredImageUpload($featuredBucketStatus['bucket_name'], $featuredCategory, $streamData->id, $_FILES['featured_image']);
+                    }
+                    if($thumbBucketStatus['response']=="success")
+                    {
+
+                        $this->commonControllerObj->thumbImageUpload($thumbBucketStatus['bucket_name'], $thumbCategory, $streamData->id, $_FILES['thumb_image']);
+                    }
+
+
 
                     //Audit Entry
                     //------------------------------------------------------------------
@@ -331,8 +353,15 @@ class StreamsController extends Controller
     public function streamDescriptionImageUpload(){
         $bucketName     =   "streams/description/";
         $category       =   7;
+
+        $bucketCreateStatus =   $this->commonControllerObj->createBucketForMediaStorage($category, $bucketName);
         //$uploadStatus   =   $this->descriptionImageUpload($bucketName, $category, $_FILES['file'], 'jscript');
-        $uploadStatus   =   $this->commonControllerObj->descriptionImageUpload($bucketName, $category, $_FILES['file'], 'jscript');
+
+        if($bucketCreateStatus['response'] == "success"){
+            $uploadStatus   =   $this->commonControllerObj->descriptionImageUpload($bucketCreateStatus['bucket_name'], $category, $_FILES['file'], 'jscript');
+        }
+
+
 
         return $uploadStatus;
     }
@@ -345,8 +374,8 @@ class StreamsController extends Controller
         $userData       =   DBUtilities::getUserInformation($idUser);
         $ed             =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
         $streamFullData =   StreamsModel::get();
-        $streamActive   =   StreamsModel::where('active_status','=','Enable')->get();
-        $streamInactive =   StreamsModel::where('active_status','=','Disable')->get();
+        $streamActive   =   StreamsModel::where('status','=',0)->get();
+        $streamInactive =   StreamsModel::where('status','=',1)->get();
 
 
         $paramArray         =   [
@@ -375,13 +404,13 @@ class StreamsController extends Controller
 
         if(isset($idStream)){
             switch($status){
-                case 'Enable':
-                    $dataArray  =   ['active_status'=>'Disable'];
+                case 0:
+                    $dataArray  =   ['status'=>1];
                     StreamsModel::where('id','=',$idStream)->update($dataArray);
 
                     break;
-                case 'Disable':
-                    $dataArray  =   ['active_status'=>'Enable'];
+                case 1:
+                    $dataArray  =   ['status'=>0];
                     StreamsModel::where('id','=',$idStream)->update($dataArray);
                     break;
 

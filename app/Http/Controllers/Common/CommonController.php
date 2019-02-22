@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use App\Models\Common\CitiesModel;
+use App\Models\Common\MediaCategoryModel;
 use App\Models\Common\StatesModel;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,9 @@ use App\Classes\MessageUtilities;
 use App\Classes\DBUtilities;
 use App\Classes\FileUploadUtilities;
 use App\Classes\AuditUtilities;
+use App\Classes\Utilities;
+use App\Classes\ModelUtilities;
+
 
 class CommonController extends Controller
 {
@@ -43,14 +47,19 @@ class CommonController extends Controller
     }
     public function featuredImageUpload($bucketName, $category, $uid, $image)
     {
+
+
         $basePath       =   "public/assets/images/";
         $targetPath     =   $basePath . $bucketName;
         $alternative    =   $image['alt'];
         $description    =   $image['desc'];
 
+
+
         $featuredImgExistCheck      =    GalleryModel::where('uid','=',$uid)->where('category','=',$category)->first();
         $uploadStatus               =    FileUploadUtilities::imageUploader($targetPath, $image, $category, 'pscript');
 
+        //dd($image);
         if ($uploadStatus['status'] == 'upload_success') {
             if(!empty($featuredImgExistCheck)){
                 $dataArray = [
@@ -61,7 +70,7 @@ class CommonController extends Controller
                     'category'      =>  $category,
                     'alternative'   =>  $alternative,
                     'description'   =>  $description,
-                    'edited_date'   =>  date('Y-m-d h:i:s')
+                    'edited_date'   =>  date('Y-m-d H:i:s')
                 ];
 
                 if(!empty($image['name'])){
@@ -78,7 +87,7 @@ class CommonController extends Controller
                     'category'      =>  $category,
                     'alternative'   =>  $alternative,
                     'description'   =>  $description,
-                    'created_date'  =>  date('Y-m-d h:i:s')
+                    'created_date'  =>  date('Y-m-d H:i:s')
                 ];
 
                 if(!empty($image['name'])){
@@ -208,6 +217,29 @@ class CommonController extends Controller
         $uploadStatus['base_path']  =   $basePath;
 
         return $uploadStatus;
+    }
+
+    public function createBucketForMediaStorage($category, $bucketName){
+        $paramArray =   [];
+        if(!empty($category)){
+            $mediaCategory =    MediaCategoryModel::where('id','=',$category)->select('base_path')->first();
+
+
+            if(!empty($mediaCategory)){
+                $targetPath         =   ['base_path'=>$mediaCategory->base_path,'bucket_name'=>$bucketName];
+                $mediaBucketName    =   Utilities::folderExistCheck($targetPath);
+                $paramArray         =   ['response' => 'success','bucket_name'=>$mediaBucketName];
+                return $paramArray;
+            }
+            else{
+                $paramArray =   ['response' => 'error','bucket_name'=>''];
+                return $paramArray;
+            }
+        }
+        else{
+            $paramArray =   ['response' => 'error','bucket_name'=>''];
+            return $paramArray;
+        }
     }
 
 }

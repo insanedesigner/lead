@@ -50,8 +50,8 @@ class CoursesCategoryController extends Controller
 
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
-        $ed                 =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
-        $streamData         =   StreamsModel::select('id', 'stream_name')->where('active_status','=','Enable')->pluck('stream_name','id')->toArray();;
+        $ed                 =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value')->toArray();
+        $streamData         =   StreamsModel::select('id', 'stream_name')->where('status','=',0)->pluck('stream_name','id')->toArray();;
         $categoryData       =   "";
         $idStream           =   "";
         $featuredImageData  =   "";
@@ -188,7 +188,7 @@ class CoursesCategoryController extends Controller
         $featuredCategory       =   4;
         $thumbCategory          =   5;
 
-        $idStream       =   $request->id_stream;
+        //$idStream       =   $request->id_stream;
         $courses        =   $request->courses_name;
         $pageHeading    =   $request->page_heading;
         $tagline        =   $request->tagline;
@@ -202,7 +202,7 @@ class CoursesCategoryController extends Controller
         $desc           =   $request->desc;
 
         //Info
-        $status         =   $request->active_status;
+        $status         =   $request->status;
         $adminNotes     =   $request->admin_notes;
 
         //Images
@@ -242,7 +242,7 @@ class CoursesCategoryController extends Controller
             if(isset($request->id_courses)){
                 $id =   $request->id_courses;
                 $dataArray  =   [
-                    'id_stream'          =>  $idStream,
+                    /*'id_stream'          =>  $idStream,*/
                     'category_name'      =>  $courses,
                     'page_heading'       =>  $pageHeading,
                     'tagline'            =>  $tagline,
@@ -288,7 +288,7 @@ class CoursesCategoryController extends Controller
             else{
 
                 $dataArray  =   [
-                    'id_stream'          =>  $idStream,
+                    /*'id_stream'          =>  $idStream,*/
                     'category_name'      =>  $courses,
                     'page_heading'       =>  $pageHeading,
                     'tagline'            =>  $tagline,
@@ -301,17 +301,31 @@ class CoursesCategoryController extends Controller
                     'status'             =>  $status,
                     'created_by'         =>  $idUser,
                     'admin_notes'        =>  $adminNotes,
-                    'created_date'       =>  date('Y-m-d h:i:s')
+                    'created_date'       =>  date('Y-m-d H:i:s')
                 ];
 
                 $categoryModel  =   CategoryModel::updateOrCreate($dataArray);
 
-                //$streamData =   StreamsModel::updateOrCreate($dataArray);
 
                 if(!empty($categoryModel->id)){
                     $id =   $categoryModel->id;
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
+
+                    $_FILES['featured_image']['extra_name'] =   "courses_category_".$featuredCategory."_".$id;
+                    $_FILES['thumb_image']['extra_name']    =   "courses_category_".$thumbCategory."_".$id;
+
+                    $featuredBucketStatus =   $this->commonControllerObj->createBucketForMediaStorage($featuredCategory, $featuredBucketName);
+                    $thumbBucketStatus    =   $this->commonControllerObj->createBucketForMediaStorage($thumbCategory, $thumbBucketName);
+
+                    if($featuredBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->featuredImageUpload($featuredBucketStatus['bucket_name'], $featuredCategory, $id, $_FILES['featured_image']);
+                    }
+                    if($thumbBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->thumbImageUpload($thumbBucketStatus['bucket_name'], $thumbCategory, $id, $_FILES['thumb_image']);
+                    }
+
+
 
                     //Audit Entry
                     //------------------------------------------------------------------

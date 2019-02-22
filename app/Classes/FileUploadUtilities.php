@@ -5,16 +5,28 @@ namespace App\Classes;
 
 class FileUploadUtilities{
     public static function imageUploader($targetDir, $image, $category, $scriptType){
+
         $imageName      =   $image['name'];
         $targetFile     =   $targetDir.basename($imageName);
         $imgExt         =   strtolower(pathinfo($targetFile,PATHINFO_EXTENSION));
         $tmpFilename    =   $image['tmp_name'];
         $imgExtArray    =   ["jpg","JPG","jpeg","JPEG","png","PNG","gif","GIF"];
 
+
+
         if(isset($image['image_new_name'])){
             $imageName  =   $image['image_new_name'].".".$imgExt;
             $targetFile =   $targetDir . $imageName;
+
         }
+
+        if(isset($image['extra_name'])){
+            $imageName   =  $image['extra_name']."_".$imageName;
+            $targetFile =   $targetDir . $imageName;
+        }
+
+
+
 
 
         if(in_array($imgExt,$imgExtArray)){

@@ -39,6 +39,11 @@ class MessageUtilities{
         $message    =   ['error' => 'Failed to upload data.'];
         return $message;
     }
+
+    public static function invalidMediaCategory(){
+        $message    =   ['error' => 'Invalid Media Category.'];
+        return $message;
+    }
 }
 
 

@@ -210,7 +210,7 @@ $(function() {
                 // simple rule, converted to {required:true}
                 stream_name: {
                     required: true,
-                    alphanumeric : true
+                    // alphanumeric : true
                 },
                 // featured_image: { required: true, extension: "png|jpe?g|gif", filesize: 1048576  }
                 featured_image : {
@@ -220,10 +220,10 @@ $(function() {
                     //thumbImageSelectedOrNot:true
                 },
                 featured_image_name : {
-                    alphanumeric : true
+                    // alphanumeric : true
                 },
                 thumb_image_name : {
-                    alphanumeric : true
+                    // alphanumeric : true
                 }
 
 
@@ -231,13 +231,13 @@ $(function() {
             messages: {
                 stream_name: {
                     required: "Required Stream Name",
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    // alphanumeric: "Special characters / White spaces are not allowed"
                 },
                 featured_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    // alphanumeric: "Special characters / White spaces are not allowed"
                 },
                 thumb_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    // alphanumeric: "Special characters / White spaces are not allowed"
                 }
 
             },

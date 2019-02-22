@@ -64,6 +64,7 @@ class UniversityController extends Controller
         $cities             =   CitiesModel::select('id','name')->pluck('name','id')->toArray();
 
 
+
         $universityData     =   "";
         $featuredImageData  =   "";
         $thumbImageData     =   "";

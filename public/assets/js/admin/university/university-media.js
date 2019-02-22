@@ -185,7 +185,7 @@ $(function() {
     var runLogoData =   function(logoData){
         if(logoData!=null){
             $('.logo_sub_div').remove();
-
+            var id          =   logoData.id;
             var basePath    =   logoData.base_path;
             var bucketName  =   logoData.bucket_name;
             var filename    =   logoData.filename;
@@ -212,7 +212,7 @@ $(function() {
                 '<div class="el-card-item">'+
                 '<div class="el-card-avatar el-overlay-1"> <img src="../'+sourceFile+'" alt="'+alt+'" /></div>'+
                 '<div class="el-card-content">'+
-                    '<a href="">Edit</a> | <a href="">Delete</a>'+
+                    '<a href="" data-value="'+id+'" data-src="../'+sourceFile+'" class="logo_edit_btn">Edit</a> | <a href="" data-value="'+id+'" data-src="../'+sourceFile+'" class="logo_delete_btn">Delete</a>'+
                 /*'<h3 class="box-title"></h3> <small>'+filename.split('.')[0]+'</small>'+*/
                 '<br/>'+
                 '</div>'+
@@ -241,6 +241,23 @@ $(function() {
 
             $('.logo_main_div').append(string);
         }
+
+
+
+        //Logo Edit Button
+        $('.logo_edit_btn').click(function(e){
+            e.preventDefault();
+            var id  =   $(this).attr('data-value');
+            var src =   $(this).attr('data-src');
+
+            $('#logo_edit').modal('show');
+
+        })
+
+
+
+
+
     };
     var runGalleryData  =   function(galleryData){
         var count   =   "";

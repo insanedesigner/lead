@@ -77,9 +77,9 @@
                                                     <label for="logo_image_alt">Alternative</label>
                                                 </div>
                                                 <div class="form-group m-b-40">
-                                                    {!! Form::text('image_name1', '', ['class' => 'form-control image_name','id'=>'image_name1']) !!}
+                                                    {!! Form::text('logo_image_desc', '', ['class' => 'form-control logo_image_desc','id'=>'logo_image_desc']) !!}
                                                     <span class="bar"></span>
-                                                    <label for="logo_image_name">Image Name</label>
+                                                    <label for="logo_image_desc">Description</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -230,6 +230,44 @@
         @include('layouts.footer.footer_text')
     </div>
 @endsection
+
+<div id="logo_edit" class="modal fade text-left" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  m-b-40">
+                <h4 class="modal-title title">Logo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body m-b-40">
+                <form class="floating-labels">
+                    <div class="form-group">
+                        {!! Form::text('image_name', '', ['class' => 'form-control image_name','id'=>'image_name']) !!}
+                        <span class="bar"></span>
+                        <label for="image_name">Image Name</label>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::text('image_alt', '', ['class' => 'form-control image_alt','id'=>'image_alt']) !!}
+                        <span class="bar"></span>
+                        <label for="image_alt">Alternate</label>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::text('image_desc', '', ['class' => 'form-control image_desc','id'=>'image_desc']) !!}
+                        <span class="bar"></span>
+                        <label for="image_desc">Description</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="file" id="file" class="dropify"  data-max-file-size="2M"  data-allowed-file-extensions="jpg png gif jpeg" />
+
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('scripts')
 

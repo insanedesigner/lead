@@ -16,16 +16,21 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#all" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">ALL</span></a> </li>
-                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#active" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">ACTIVE</span></a> </li>
-                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#inactive" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">INACTIVE</span></a> </li>
+                        <div class="card-body p-b-0">
+                            @include('includes.alert_message.alert_message',['error' => Session::get('error'), 'success' => Session::get('success')])
+                        </div>
 
-                            </ul>
-                            <div class="tab-content tabcontent-border">
-                                <div class="tab-pane" id="all" role="tabpanel">
-                                    <div class="p-20">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs customtab" role="tablist">
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#all" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">ALL</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#active" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">ACTIVE</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#inactive" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">INACTIVE</span></a> </li>
+                        </ul>
+
+                        <div class="tab-content tabcontent-border">
+                            <div class="tab-pane" id="all" role="tabpanel">
+                                <div class=" p-20 ">
+                                    <div class="form-group m-b-40 m-t-40">
                                         <table id="full_table" class="display nowrap" style="width:100%">
                                             <thead>
                                             <tr>
@@ -41,7 +46,7 @@
                                                     <td>{{$index+1}}</td>
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
-                                                        @if($val->active_status=='Enable')
+                                                        @if($val->status==0)
                                                             <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
                                                             <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
@@ -63,8 +68,10 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane active" id="active" role="tabpanel">
-                                    <div class="p-20">
+                            </div>
+                            <div class="tab-pane active" id="active" role="tabpanel">
+                                <div class=" p-20 ">
+                                    <div class="form-group m-b-40 m-t-40">
                                         <table id="active_table" class="display nowrap" style="width:100%">
                                             <thead>
                                             <tr>
@@ -80,7 +87,7 @@
                                                     <td>{{$index+1}}</td>
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
-                                                        @if($val->active_status=='Enable')
+                                                        @if($val->status==0)
                                                             <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
                                                             <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger"><span style="font-size:12px">Inactive</span> </a>
@@ -104,55 +111,56 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane  " id="inactive" role="tabpanel">
-                                    <div class="p-20">
-                                        <table id="inactive_table" class="display nowrap" style="width:100%">
-                                            <thead>
+                            </div>
+                            <div class="tab-pane" id="inactive" role="tabpanel">
+                                <div class="p-20">
+                                    <table id="inactive_table" class="display nowrap" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Stream Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($streamInactive as $index=>$val)
                                             <tr>
-                                                <th>Sl.No</th>
-                                                <th>Stream Name</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <td>{{$index+1}}</td>
+                                                <td>{{$val->stream_name}}</td>
+                                                <td>
+                                                    @if($val->status==0)
+                                                        <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success" id="active_btn" ><span style="font-size:12px">Active</span></a>
+                                                    @else
+                                                        <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn" id="inactive_btn"><span style="font-size:12px">Inactive</span> </a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{ Form::open(array('url'=>'admin/streams','class'=>'floating-labels','id'=>'streamEditForm'))  }}
+                                                    {!! Form::hidden('id_stream', '', ['class' => 'form-control','id'=>'id_stream']) !!}
+
+                                                    {{--<a href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger edit_btn">Edit </a>--}}
+                                                    <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
+
+                                                    {{--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning" value="Edit"></input>--}}
+                                                    {{ Form::close() }}
+                                                </td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($streamInactive as $index=>$val)
-                                                <tr>
-                                                    <td>{{$index+1}}</td>
-                                                    <td>{{$val->stream_name}}</td>
-                                                    <td>
-                                                        @if($val->active_status=='Enable')
-                                                            <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success" id="active_btn" ><span style="font-size:12px">Active</span></a>
-                                                        @else
-                                                            <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn" id="inactive_btn"><span style="font-size:12px">Inactive</span> </a>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        {{ Form::open(array('url'=>'admin/streams','class'=>'floating-labels','id'=>'streamEditForm'))  }}
-                                                        {!! Form::hidden('id_stream', '', ['class' => 'form-control','id'=>'id_stream']) !!}
-
-                                                        {{--<a href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger edit_btn">Edit </a>--}}
-                                                        <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
-
-                                                        {{--<input type="submit" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning" value="Edit"></input>--}}
-                                                        {{ Form::close() }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                        @endforeach
 
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-
                         </div>
+
+
+
+
                     </div>
                 </div>
-
             </div>
-
         </div>
 
         @include('layouts.footer.footer_text')
