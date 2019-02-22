@@ -231,7 +231,8 @@ $(function() {
                     //alphanumeric : true
                 },
                 thumb_image_name : {
-                    //alphanumeric : true
+                    //
+                    // alphanumeric : true
                 }
 
 
