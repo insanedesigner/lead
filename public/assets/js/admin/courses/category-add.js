@@ -228,10 +228,10 @@ $(function() {
                     //thumbImageSelectedOrNot:true
                 },
                 featured_image_name : {
-                    alphanumeric : true
+                    //alphanumeric : true
                 },
                 thumb_image_name : {
-                    alphanumeric : true
+                    //alphanumeric : true
                 }
 
 

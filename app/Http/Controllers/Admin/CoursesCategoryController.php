@@ -51,7 +51,7 @@ class CoursesCategoryController extends Controller
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
         $ed                 =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value')->toArray();
-        $streamData         =   StreamsModel::select('id', 'stream_name')->where('status','=',0)->pluck('stream_name','id')->toArray();;
+        //$streamData         =   StreamsModel::select('id', 'stream_name')->where('status','=',0)->pluck('stream_name','id')->toArray();;
         $categoryData       =   "";
         $idStream           =   "";
         $featuredImageData  =   "";
@@ -70,9 +70,7 @@ class CoursesCategoryController extends Controller
         $thumbImgAlt        =   "";
         $thumbImgDesc       =   "";
 
-        array_unshift($streamData, "Select a Stream");
 
-        //dd($request->id_courses);
 
         if(isset($request->id_courses)){
             //$streamFullData =   StreamsModel::join('gallery As g','streams.id','=','g.uid')->get();
@@ -123,7 +121,7 @@ class CoursesCategoryController extends Controller
         }
         else{
             $coursesCategoryData    =   [
-                'idStream'          =>  "",
+                /*'idStream'          =>  "",*/
                 'idCategory'        =>  "",
                 'coursesName'       =>  "",
                 'pageHeading'       =>  "",
@@ -160,7 +158,7 @@ class CoursesCategoryController extends Controller
             'urlData'      =>   "admin/coursescategory",
             'ed'           =>   $ed,
             'userData'     =>   $userData,
-            'streamData'   =>   $streamData,
+            /*'streamData'   =>   $streamData,*/
             'coursesData'  =>   $coursesCategoryData,
             'idScreen'     =>   6
         ];
@@ -370,15 +368,10 @@ class CoursesCategoryController extends Controller
         $idUser         =   Session::get('users.idUser')[0];
         $userData       =   DBUtilities::getUserInformation($idUser);
         $ed             =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
-        $courseFullData =   CategoryModel::join('streams As s','s.id','=','courses_categories.id_stream')
-            ->select('s.stream_name','courses_categories.*')
-            ->get();
-        $courseActive   =   CategoryModel::join('streams As s','s.id','=','courses_categories.id_stream')
-            ->select('s.stream_name','courses_categories.*')
-            ->where('courses_categories.status','=','Enable')->get();
-        $courseInactive =   CategoryModel::join('streams As s','s.id','=','courses_categories.id_stream')
-            ->select('s.stream_name','courses_categories.*')
-            ->where('courses_categories.status','=','Disable')->get();
+        $courseFullData =   CategoryModel::get();
+        $courseActive   =   CategoryModel::where('status','=',0)->get();
+        $courseInactive =   CategoryModel::where('status','=',1)->get();
+
 
 
         $paramArray         =   [
@@ -408,13 +401,13 @@ class CoursesCategoryController extends Controller
 
         if(isset($idCourses)){
             switch($status){
-                case 'Enable':
-                    $dataArray  =   ['status'=>'Disable'];
+                case 0:
+                    $dataArray  =   ['status'=>1];
                     CategoryModel::where('id','=',$idCourses)->update($dataArray);
 
                     break;
-                case 'Disable':
-                    $dataArray  =   ['status'=>'Enable'];
+                case 1:
+                    $dataArray  =   ['status'=>0];
                     CategoryModel::where('id','=',$idCourses)->update($dataArray);
 
                     break;
