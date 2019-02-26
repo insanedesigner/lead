@@ -214,7 +214,7 @@ $(function() {
                     }
 
                     if(event == "default"){
-                        alert('ds');
+
                         stateSelected   =   $('#state_hidden').val();
                         $(".state option[value="+stateSelected+"]").attr('selected','selected');
                     }
@@ -349,10 +349,10 @@ $(function() {
                     //thumbImageSelectedOrNot:true
                 },
                 featured_image_name : {
-                    alphanumeric : true
+                    //alphanumeric : true
                 },
                 thumb_image_name : {
-                    alphanumeric : true
+                   // alphanumeric : true
                 }
 
 
@@ -362,10 +362,10 @@ $(function() {
                     required: "Required a University Name."
                 },
                 featured_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    //alphanumeric: "Special characters / White spaces are not allowed"
                 },
                 thumb_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    //alphanumeric: "Special characters / White spaces are not allowed"
                 }
 
             },

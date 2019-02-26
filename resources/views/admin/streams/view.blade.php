@@ -47,9 +47,9 @@
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
                                                         @if($val->status==0)
-                                                            <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
+                                                            <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
-                                                            <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
+                                                            <a data-value="{{$val->id}}" data-text="1" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn"><span style="font-size:12px">Inactive</span> </a>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -88,9 +88,9 @@
                                                     <td>{{$val->stream_name}}</td>
                                                     <td>
                                                         @if($val->status==0)
-                                                            <a data-value="{{$val->id}}" data-text="Enable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
+                                                            <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
                                                         @else
-                                                            <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger"><span style="font-size:12px">Inactive</span> </a>
+                                                            <a data-value="{{$val->id}}" data-text="1" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger"><span style="font-size:12px">Inactive</span> </a>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -130,9 +130,9 @@
                                                 <td>{{$val->stream_name}}</td>
                                                 <td>
                                                     @if($val->status==0)
-                                                        <a href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success" id="active_btn" ><span style="font-size:12px">Active</span></a>
+                                                        <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success" id="active_btn" ><span style="font-size:12px">Active</span></a>
                                                     @else
-                                                        <a data-value="{{$val->id}}" data-text="Disable" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn" id="inactive_btn"><span style="font-size:12px">Inactive</span> </a>
+                                                        <a data-value="{{$val->id}}" data-text="1" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger inactive_btn" id="inactive_btn"><span style="font-size:12px">Inactive</span> </a>
                                                     @endif
                                                 </td>
                                                 <td>

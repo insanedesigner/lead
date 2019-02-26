@@ -30,6 +30,7 @@ Route::post('/loadStateOnCountries', 'Common\CommonController@loadStateOnCountri
 Route::post('/loadCityOnStates', 'Common\CommonController@loadCityOnStates')->name('loadCityOnStates');
 Route::post('/handleUniversityStatusChange', 'Admin\UniversityController@handleUniversityStatusChange')->name('handleUniversityStatusChange');
 Route::post('/loadMediaForUniversity', 'Admin\UniversityController@loadMediaForUniversity')->name('loadMediaForUniversity');
+Route::post('/handleUniversityMediaDelete', 'Admin\UniversityController@handleUniversityMediaDelete')->name('handleUniversityMediaDelete');
 
 
 //Route::post('/testAjax', 'Admin\AdminController@streamDescriptionImageUploader')->name('streamImageUploader');

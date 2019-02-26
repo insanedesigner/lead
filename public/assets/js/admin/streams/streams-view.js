@@ -43,7 +43,7 @@ $(function() {
                                                 type: "success"
                                             },
                                             function(){
-                                                window.location.href = 'viewstreams';
+                                                window.location.href = 'manage_streams';
                                             });
 
                                     }

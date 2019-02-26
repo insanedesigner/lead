@@ -37,6 +37,11 @@
                         {{ Form::open(array('url' => 'admin/handleAddCoursesCategory','class'=>'floating-labels','id'=>'addCoursesCategoryForm','enctype'=>'multipart/form-data'))  }}
                         {!! Form::hidden('id_courses', $coursesData['idCategory'], ['class' => 'form-control','id'=>'id_courses']) !!}
 
+
+
+
+
+
                             <div class="tab-content tabcontent-border">
                                 <div class="tab-pane active" id="contents" role="tabpanel">
                                     <div class=" p-20 ">

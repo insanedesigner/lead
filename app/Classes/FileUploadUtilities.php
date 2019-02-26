@@ -97,8 +97,12 @@ class FileUploadUtilities{
 
         if(isset($file['doc_new_name'])){
             $docName    =   $file['doc_new_name'].".".$docExt;
-            $targetFile =   $targetDir . $docName;
+
         }
+        if(isset($file['extra_name'])){
+            $docName    =   $file['extra_name']."_".$docName;
+        }
+        $targetFile =   $targetDir . $docName;
 
         if(in_array($docExt,$docExtArray)){
             if(move_uploaded_file($tmpFilename, $targetFile)){

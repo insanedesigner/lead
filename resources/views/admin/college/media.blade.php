@@ -33,7 +33,7 @@
                             @include('includes.alert_message.alert_message',['error' => Session::get('error'), 'success' => Session::get('success')])
                         </div>
                         <!-- Nav tabs -->
-                        <ul class="nav nav-tabs customtab m-t-30 m-b-30" role="tablist">
+                        <ul class="nav nav-tabs customtab" role="tablist">
                             <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#logo" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Logo</span></a> </li>
                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#images" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Images</span></a> </li>
                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#brouchers" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Brouchers</span></a> </li>
@@ -100,7 +100,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="focused m-b-40">
-                                                        {{ Form::select('university', $universityData, $idUniversity, ['id' => 'university','class'=>'form-control p-0 university']) }}
+                                                        {{ Form::select('university', $universityData, '', ['id' => 'university','class'=>'form-control p-0 university']) }}
                                                         <span class="bar"></span>
                                                         <label for="university">University <span class="text-danger">*</span></label>
                                                     </div>
@@ -157,7 +157,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="focused m-b-40">
-                                                        {{ Form::select('university', $universityData, $idUniversity, ['id' => 'university','class'=>'form-control p-0 university']) }}
+                                                        {{ Form::select('university', $universityData, '', ['id' => 'university','class'=>'form-control p-0 university']) }}
                                                         <span class="bar"></span>
                                                         <label for="university">University <span class="text-danger">*</span></label>
                                                     </div>
@@ -203,7 +203,7 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="focused m-b-40">
-                                                        {{ Form::select('university', $universityData, $idUniversity, ['id' => 'university','class'=>'form-control p-0 university']) }}
+                                                        {{ Form::select('university', $universityData, '', ['id' => 'university','class'=>'form-control p-0 university']) }}
                                                         <span class="bar"></span>
                                                         <label for="university">University <span class="text-danger">*</span></label>
                                                     </div>

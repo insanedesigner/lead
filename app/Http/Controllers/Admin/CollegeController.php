@@ -39,7 +39,7 @@ use App\Classes\ModelUtilities;
 //Controllers
 use App\Http\Controllers\Common\CommonController;
 
-class UniversityController extends Controller
+class CollegeController extends Controller
 {
 
     public function __construct()
@@ -49,7 +49,7 @@ class UniversityController extends Controller
 
 
     }
-    public function showAddUniversity(Request $request){
+    public function showCollege(Request $request){
 
         $role   =   1;
         $idRole =   1;
@@ -592,17 +592,14 @@ class UniversityController extends Controller
         $thumbImgAlt        =   "";
         $thumbImgDesc       =   "";
 
-        //dd($universityData);
 
         $universityData[0] = "Select a university";
         ksort($universityData);
 
 
-
-
         if(isset($request->id_university)){
 
-            //$universityData         =   UniversityModel::where('id','=',$request->id_university)->first();
+            $universityData         =   UniversityModel::where('id','=',$request->id_university)->first();
             $logoImageData          =   GalleryModel::where('uid','=',$request->id_university)->where('category','=',11)->first();
             $featuredImageData      =   GalleryModel::where('uid','=',$request->id_university)->where('category','=',12)->first();
             $thumbImageData         =   GalleryModel::where('uid','=',$request->id_university)->where('category','=',13)->first();
@@ -610,21 +607,17 @@ class UniversityController extends Controller
         }
 
 
-
-
-
         $paramArray         =   [
-            'pageBase'          =>  'Home',
-            'pageTitle'         =>  'Media Uploads',
-            'browserTitle'      =>   'Media Management',
-            'role'              =>   'ad',
-            'idRole'            =>   1,
-            'urlData'           =>   "admin/media_university",
-            'ed'                =>   $ed,
-            'idUniversity'      =>  $request->id_university,
+            'pageBase'     =>  'Home',
+            'pageTitle'    =>  'Media Uploads',
+            'browserTitle' =>   'Media Management',
+            'role'         =>   'ad',
+            'idRole'       =>   1,
+            'urlData'      =>   "admin/media_univresity",
+            'ed'           =>   $ed,
             'universityData'    =>  $universityData,
-            'userData'          =>   $userData,
-            'idScreen'          =>   12
+            'userData'     =>   $userData,
+            'idScreen'     =>   3
         ];
 
 
@@ -912,47 +905,6 @@ class UniversityController extends Controller
             $param  =   ['error' => 'Invalid_university'];
             return json_encode($param);
         }
-    }
-
-    public function handleUniversityMediaDelete(Request $request){
-        $idUniversity   =   $request->id_university;
-        $idMedia        =   $request->id_logo;
-        $targetPath     =   "";
-
-
-        if(!empty($idLogo)){
-            $logoData   =   GalleryModel::find($idLogo);
-
-            if(!empty($logoData)){
-                $category       =   $logoData->category;
-                $basePath       =   $logoData->base_path;
-                $bucketName     =   $logoData->bucket_name;
-                $filename       =   $logoData->filename;
-                $bucketExist    =   $this->commonControllerObj->createBucketForMediaStorage($category, $bucketName);
-
-                if($bucketExist['response'] == "success"){
-                    $targetPath =   $basePath.$bucketName.$filename;
-
-                    if(!empty($targetPath)){
-                        $data = GalleryModel::where('id','=',$idLogo)->delete();
-                        if($data){
-                            unlink($targetPath);
-                        }
-
-                    }
-
-                }
-            }
-            else{
-                $status =   ['status'=>'invalid_file'];
-                return json_encode($status);
-            }
-        }
-
-
-
-
-
     }
 
 }

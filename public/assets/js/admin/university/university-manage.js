@@ -36,9 +36,14 @@ $(function() {
 
                                 success: function (data) {
                                     if(data == 'success'){
-                                        swal("Bingo!", "Your status has been updated.", "success");
-                                        //$('#active_table').html(data);
-                                        //$( "#active_table" ).load();
+                                        swal({
+                                                title: "Bingo",
+                                                text: "Your status has been updated.",
+                                                type: "success"
+                                            },
+                                            function(){
+                                                window.location.href = 'manage_university';
+                                            });
                                     }
 
 
@@ -71,6 +76,14 @@ $(function() {
             $('#id').val($(this).attr('data-value'));
             $('#universityEditForm').submit();
         })
+    };
+
+    var mediaButtonClick    =   function(){
+        $('.media_upload_btn').click(function(e){
+            e.preventDefault();
+            $('#id_university').val($(this).attr('data-value'));
+           $('#mediaAddForm').submit();
+        });
     }
 
 
@@ -80,6 +93,7 @@ $(function() {
 
     runUniversityDetails();
     editButtonClick();
+    mediaButtonClick();
 
 
 

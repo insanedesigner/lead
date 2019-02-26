@@ -36,7 +36,14 @@ $(function() {
 
                                 success: function (data) {
                                     if(data == 'success'){
-                                        swal("Bingo!", "Your status has been updated.", "success");
+                                        swal({
+                                                title: "Bingo",
+                                                text: "Your status has been updated.",
+                                                type: "success"
+                                            },
+                                            function(){
+                                                window.location.href = 'manage_courses';
+                                            });
                                     }
 
 
@@ -67,8 +74,8 @@ $(function() {
     var editButtonClick =   function(){
         $('.edit_btn').click(function(e){
             e.preventDefault();
-            $('#id_courses_data').val($(this).attr('data-value'));
-            $('#coursesEditDataForm').submit();
+            $('#id_courses').val($(this).attr('data-value'));
+            $('#coursesEditForm').submit();
 
 
         })

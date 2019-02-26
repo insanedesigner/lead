@@ -146,7 +146,7 @@ $(function() {
             var idUniversity    =   $(this).val();
             var dataString      =   'id='+idUniversity;
 
-            if(idUniversity!=''){
+            if(idUniversity!='' ){
                 $.ajax({
                     type: 'POST',
                     url: "../api/loadMediaForUniversity",
@@ -164,13 +164,9 @@ $(function() {
 
                         runLogoData(logoData);          //Logo Data
                         runGalleryData(galleryData);    //Gallery Data
-                        runBroucherData(broucherData); //Broucher Data
+                        runBroucherData(broucherData);  //Broucher Data
 
-
-
-
-
-
+                        $('.id_university_hidden').val(idUniversity); //assigning university id to a hidden text for fetching
                     }
                 });
             }
@@ -212,6 +208,7 @@ $(function() {
                 '<div class="el-card-item">'+
                 '<div class="el-card-avatar el-overlay-1"> <img src="../'+sourceFile+'" alt="'+alt+'" /></div>'+
                 '<div class="el-card-content">'+
+                    '<input type="hidden" class="id_university_hidden" value="'+id+'"/>'+
                     '<a href="" data-value="'+id+'" data-src="../'+sourceFile+'" class="logo_edit_btn">Edit</a> | <a href="" data-value="'+id+'" data-src="../'+sourceFile+'" class="logo_delete_btn">Delete</a>'+
                 /*'<h3 class="box-title"></h3> <small>'+filename.split('.')[0]+'</small>'+*/
                 '<br/>'+
@@ -225,6 +222,33 @@ $(function() {
 
 
             $('.logo_main_div').append(string);
+
+            $('.logo_delete_btn').click(function(e){
+                e.preventDefault();
+
+
+                var idUniversity    =   $('.id_university_hidden').val();
+                var idLogo          =   $(this).attr('data-value');
+                var dataString      =   'id_university='+idUniversity+'&id_logo='+idLogo;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "../api/handleUniversityMediaDelete",
+                    data: dataString,
+                    dataType: "JSON",
+                    cache: false,
+
+                    success: function (data) {
+
+                    }
+                });
+
+
+            })
+
+
+
+
         }
         else{
             $('.logo_sub_div').remove();
@@ -252,7 +276,9 @@ $(function() {
 
             $('#logo_edit').modal('show');
 
-        })
+        });
+
+
 
 
 

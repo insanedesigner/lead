@@ -148,6 +148,7 @@ class CommonController extends Controller
     }
 
     public function logoImageUploads($basePath, $bucketName, $category, $image, $scriptType){
+
         $targetDir                  =   $basePath.$bucketName;
         $uploadStatus               =   FileUploadUtilities::imageUploader($targetDir,$image, $category,$scriptType);
         $uploadStatus['base_path']  =   $basePath;
@@ -228,7 +229,7 @@ class CommonController extends Controller
             if(!empty($mediaCategory)){
                 $targetPath         =   ['base_path'=>$mediaCategory->base_path,'bucket_name'=>$bucketName];
                 $mediaBucketName    =   Utilities::folderExistCheck($targetPath);
-                $paramArray         =   ['response' => 'success','bucket_name'=>$mediaBucketName];
+                $paramArray         =   ['response' => 'success','bucket_name'=>$mediaBucketName, 'base_path'=>$mediaCategory->base_path];
                 return $paramArray;
             }
             else{

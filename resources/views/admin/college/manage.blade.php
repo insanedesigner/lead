@@ -26,28 +26,53 @@
                             <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#active" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">ACTIVE</span></a> </li>
                             <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#inactive" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">INACTIVE</span></a> </li>
                         </ul>
-
                         <div class="tab-content tabcontent-border">
                             <div class="tab-pane" id="all" role="tabpanel">
                                 <div class="p-20">
                                     <table id="full_table" class="display nowrap" style="width:100%">
                                         <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>Sl.No</th>
-                                            <th>Streams</th>
-                                            <th>Courses Category</th>
-                                            <th>Courses</th>
+                                            <th>University Name</th>
+                                            {{--<th >Courses Name</th>--}}
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($courseFullData as $index=>$val)
-                                            <tr>
+                                        @foreach($full as $index=>$val)
+                                            <tr class="text-center">
                                                 <td>{{$index+1}}</td>
-                                                <td>{{$val->stream_name}}</td>
-                                                <td>{{$val->category_name}}</td>
-                                                <td>{{$val->course_name}}</td>
+                                                <td>{{$val->university_name}}</td>
+                                                {{--<td>
+                                                    <a  class="btn waves-effect waves-light btn-rounded btn-xs btn-info btn-outline-info" data-toggle="modal" data-target="#courses_view_modal_full{{$index}}">View</a>
+                                                    <div id="courses_view_modal_full{{$index}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Courses</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form>
+                                                                        <div class="form-group">
+                                                                            <ul class="text-left">
+                                                                                @foreach(json_decode($val->course_name) as $index=>$courses)
+                                                                                    <li> {{$courses}}</li>
+                                                                                @endforeach
+                                                                            </ul>
+
+                                                                        </div>
+
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>--}}
                                                 <td>
                                                     @if($val->status==0)
                                                         <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
@@ -56,8 +81,8 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ Form::open(array('url'=>'admin/courses','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
-                                                    {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
+                                                    {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
+                                                    {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
 
                                                     <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
@@ -75,22 +100,48 @@
                                 <div class="p-20">
                                     <table id="active_table" class="display nowrap" style="width:100%">
                                         <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>Sl.No</th>
-                                            <th>Streams</th>
-                                            <th>Category</th>
-                                            <th>Courses</th>
+                                            <th>University Name</th>
+                                            {{--<th>Courses Name</th>--}}
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($courseActiveData as $index=>$val)
-                                            <tr>
+                                        @foreach($active as $index=>$val)
+                                            <tr class="text-center">
                                                 <td>{{$index+1}}</td>
-                                                <td>{{$val->stream_name}}</td>
-                                                <td>{{$val->category_name}}</td>
-                                                <td>{{$val->course_name}}</td>
+                                                <td>{{$val->university_name}}</td>
+                                                {{--<td>
+                                                    <a  class="btn waves-effect waves-light btn-rounded btn-xs btn-info btn-outline-info" data-toggle="modal" data-target="#courses_view_modal_active{{$index}}">View</a>
+                                                    <div id="courses_view_modal_active{{$index}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Courses</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form>
+                                                                        <div class="form-group">
+                                                                            <ul class="text-left">
+                                                                                @foreach(json_decode($val->course_name) as $index=>$courses)
+                                                                                    <li> {{$courses}}</li>
+                                                                                @endforeach
+                                                                            </ul>
+
+                                                                        </div>
+
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>--}}
                                                 <td>
                                                     @if($val->status==0)
                                                         <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
@@ -99,8 +150,8 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ Form::open(array('url'=>'admin/courses','class'=>'floating-labels','id'=>'coursesEditDataForm'))  }}
-                                                    {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses_data']) !!}
+                                                    {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
+                                                    {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
 
                                                     <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
 
@@ -118,22 +169,48 @@
                                 <div class="p-20">
                                     <table id="inactive_table" class="display nowrap" style="width:100%">
                                         <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>Sl.No</th>
-                                            <th>Streams</th>
-                                            <th>Category</th>
-                                            <th>Courses</th>
+                                            <th>University Name</th>
+                                            {{-- <th>Courses Name</th>--}}
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($courseInactiveData as $index=>$val)
-                                            <tr>
+                                        @foreach($inactive as $index=>$val)
+                                            <tr class="text-center">
                                                 <td>{{$index+1}}</td>
-                                                <td>{{$val->stream_name}}</td>
-                                                <td>{{$val->category_name}}</td>
-                                                <td>{{$val->course_name}}</td>
+                                                <td>{{$val->university_name}}</td>
+                                                {{--<td>
+                                                    <a  class="btn waves-effect waves-light btn-rounded btn-xs btn-info btn-outline-info" data-toggle="modal" data-target="#courses_view_modal_inactive{{$index}}">View</a>
+                                                    <div id="courses_view_modal_inactive{{$index}}" class="modal fade text-left" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Courses</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form>
+                                                                        <div class="form-group">
+                                                                            <ul>
+                                                                                @foreach(json_decode($val->course_name) as $index=>$courses)
+                                                                                    <li> {{$courses}}</li>
+                                                                                @endforeach
+                                                                            </ul>
+
+                                                                        </div>
+
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>--}}
                                                 <td>
                                                     @if($val->status==0)
                                                         <a data-value="{{$val->id}}" data-text="0" href="#" class="btn waves-effect waves-light btn-rounded btn-xs btn-success btn-outline-success active_btn"><span style="font-size:12px">Active</span></a>
@@ -142,11 +219,10 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ Form::open(array('url'=>'admin/courses','class'=>'floating-labels','id'=>'coursesEditForm'))  }}
-                                                    {!! Form::hidden('id_courses', '', ['class' => 'form-control','id'=>'id_courses']) !!}
+                                                    {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
+                                                    {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
 
                                                     <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning edit_btn"><span style="font-size:12px">Edit</span> </a>
-
                                                     {{ Form::close() }}
                                                 </td>
                                             </tr>
@@ -158,15 +234,12 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </div>
             </div>
-
         </div>
+
+
 
         @include('layouts.footer.footer_text')
 
@@ -181,7 +254,7 @@
     <script type="text/javascript" src="{!! asset('https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js') !!}"></script>
     <script type="text/javascript" src="{!! asset('https://cdn.datatables.net/plug-ins/1.10.19/api/fnReloadAjax.js') !!}"></script>
 
-    <script type="text/javascript" src="{!! asset('public/assets/js/admin/courses/courses-view.js') !!}"></script>
+    <script type="text/javascript" src="{!! asset('public/assets/js/admin/university/university-manage.js') !!}"></script>
 
 
     <script>

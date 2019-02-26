@@ -24,6 +24,7 @@
 
 
 
+
     if($idRole  ==  1){
         if(!empty($urlData)){
             //$idScreen   =   $urlData['id_user_screen'];
@@ -104,7 +105,7 @@
             <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bullseye"></i><span class="hide-menu">Stream</span></a>
                 <ul aria-expanded="false" class="collapse">
                     <li class="{{$addStreamActive }}"><a class="{{$addStreamActive}}" href="streams">Add</a></li>
-                    <li class="{{$viewStreamActive}}"><a class="{{$viewStreamActive}}" href="viewstreams">Manage </a></li>
+                    <li class="{{$viewStreamActive}}"><a class="{{$viewStreamActive}}" href="manage_streams">Manage </a></li>
                 </ul>
             </li>
 
@@ -112,14 +113,14 @@
             <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bullseye"></i><span class="hide-menu">Courses Category</span></a>
                 <ul aria-expanded="false" class="collapse">
                     <li class="{{$addCoursesCatActive }}"><a class="{{$addCoursesCatActive}}" href="coursescategory">Add</a></li>
-                    <li class="{{$viewCoursesCatActive}}"><a class="{{$viewCoursesCatActive}}" href="viewcoursescategory">Manage </a></li>
+                    <li class="{{$viewCoursesCatActive}}"><a class="{{$viewCoursesCatActive}}" href="manage_courses_category">Manage </a></li>
                 </ul>
             </li>
             {{--Courses  Menu--}}
             <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-bullseye"></i><span class="hide-menu">Courses</span></a>
                 <ul aria-expanded="false" class="collapse">
                     <li class="{{$addCoursesActive }}"><a class="{{$addCoursesActive}}" href="courses">Add</a></li>
-                    <li class="{{$viewCoursesActive}}"><a class="{{$viewCoursesActive}}" href="viewcourses">Manage </a></li>
+                    <li class="{{$viewCoursesActive}}"><a class="{{$viewCoursesActive}}" href="manage_courses">Manage </a></li>
                 </ul>
             </li>
 
@@ -128,7 +129,11 @@
                 <ul aria-expanded="false" class="collapse">
                     <li class="{{$addUniversityActive }}"><a class="{{$addUniversityActive}}" href="university">Add</a></li>
                     <li class="{{$viewUniversityActive}}"><a class="{{$viewUniversityActive}}" href="manage_university">Manage </a></li>
-                    <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}" href="media_university">Media Uploads </a></li>
+                    @if($mediaUniversityActive == "active")
+                        <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}" href="media_university">Media Uploads </a></li>
+                    @else
+                        <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}">Media Uploads </a></li>
+                    @endif
                 </ul>
             </li>
 

@@ -227,10 +227,10 @@ $(function() {
                     //thumbImageSelectedOrNot:true
                 },
                 featured_image_name : {
-                    alphanumeric : true
+                    //alphanumeric : true
                 },
                 thumb_image_name : {
-                    alphanumeric : true
+                    //alphanumeric : true
                 }
 
 
@@ -240,10 +240,10 @@ $(function() {
                     required: "Required a Course Name."
                 },
                 featured_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    //alphanumeric: "Special characters / White spaces are not allowed"
                 },
                 thumb_image_name: {
-                    alphanumeric: "Special characters / White spaces are not allowed"
+                    //alphanumeric: "Special characters / White spaces are not allowed"
                 }
 
             },

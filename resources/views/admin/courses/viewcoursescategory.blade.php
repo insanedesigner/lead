@@ -30,7 +30,7 @@
                         <div class="tab-content tabcontent-border">
                             <div class="tab-pane" id="all" role="tabpanel">
                                 <div class=" p-20 ">
-                                    <div class="form-group m-b-40 m-t-40">
+                                    <div class="form-group m-b-40">
                                         <table id="full_table" class="display nowrap" style="width:100%">
                                             <thead>
                                             <tr>

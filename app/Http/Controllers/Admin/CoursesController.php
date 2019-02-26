@@ -47,8 +47,9 @@ class CoursesController extends Controller
 
         $idUser             =   Session::get('users.idUser')[0];
         $userData           =   DBUtilities::getUserInformation($idUser);
-        $ed                 =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
-        $categoryData       =   CategoryModel::select('id', 'category_name')->where('status','=','Enable')->pluck('category_name','id')->toArray();;
+        $ed                 =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value')->toArray();
+        $streamData         =   StreamsModel::select('id', 'stream_name')->where('status','=',0)->pluck('stream_name','id')->toArray();
+        $categoryData       =   CategoryModel::select('id', 'category_name')->where('status','=',0)->pluck('category_name','id')->toArray();
         $coursesData        =   "";
         $idCategory         =   "";
         $idCourses          =   "";
@@ -68,17 +69,23 @@ class CoursesController extends Controller
         $thumbImgAlt        =   "";
         $thumbImgDesc       =   "";
 
-        array_unshift($categoryData, "Select a Course Category");
+        $streamData[0] = "Select a stream";
+        ksort($streamData);
+
+        $categoryData[0] = "Select a course category";
+        ksort($categoryData);
 
 
 
         if(isset($request->id_courses)){
             //$streamFullData =   StreamsModel::join('gallery As g','streams.id','=','g.uid')->get();
             $coursesData            =   CoursesModel::where('id','=',$request->id_courses)->first();
-            $featuredImageData      =   GalleryModel::where('uid','=',$request->id_courses)->where('category','=',4)->first();
-            $thumbImageData         =   GalleryModel::where('uid','=',$request->id_courses)->where('category','=',5)->first();
+            $featuredImageData      =   GalleryModel::where('uid','=',$request->id_courses)->where('category','=',8)->first();
+            $thumbImageData         =   GalleryModel::where('uid','=',$request->id_courses)->where('category','=',9)->first();
 
         }
+
+        //dd($featuredImageData);
 
 
         if(!empty($coursesData)){
@@ -98,6 +105,7 @@ class CoursesController extends Controller
             $coursesData    =   [
                 'idCourses'         =>  $request->id_courses,
                 'idCategory'        =>  $coursesData->id_courses_category,
+                'idStream'          =>  $coursesData['id_stream'],
                 'coursesName'       =>  $coursesData->course_name,
                 'pageHeading'       =>  $coursesData->page_heading,
                 'tagline'           =>  $coursesData->tagline,
@@ -124,6 +132,7 @@ class CoursesController extends Controller
             $coursesData    =   [
                 'idCourses'         =>  "",
                 'idCategory'        =>  "",
+                'idStream'          =>  "",
                 'coursesName'       =>  "",
                 'pageHeading'       =>  "",
                 'tagline'           =>  "",
@@ -159,6 +168,7 @@ class CoursesController extends Controller
             'urlData'      =>   "admin/courses",
             'ed'           =>   $ed,
             'userData'     =>   $userData,
+            'streamData'   =>   $streamData,
             'categoryData' =>   $categoryData,
             'coursesData'  =>   $coursesData,
             'idScreen'     =>   8
@@ -167,14 +177,6 @@ class CoursesController extends Controller
 
 
         return view('admin.courses.courses',$paramArray);
-
-
-
-
-
-
-
-
 
     }
     public function handleAddCourses(Request $request){
@@ -187,12 +189,14 @@ class CoursesController extends Controller
         $featuredCategory       =   8;
         $thumbCategory          =   9;
 
-        $idCategory     =   $request->id_category;
-        $courses        =   $request->courses_name;
-        $pageHeading    =   $request->page_heading;
-        $tagline        =   $request->tagline;
-        $desc1          =   $request->input('desc1');
-        $desc2          =   $request->input('desc2');
+        //$idCategory     =   $request->id_category;
+        $streams            =   $request->stream_name;
+        $courses            =   $request->course_name;
+        $coursesCategory    =   $request->courses_category;
+        $pageHeading        =   $request->page_heading;
+        $tagline            =   $request->tagline;
+        $desc1              =   $request->input('desc1');
+        $desc2              =   $request->input('desc2');
 
         //SEO Elements
         $title          =   $request->title;
@@ -201,7 +205,7 @@ class CoursesController extends Controller
         $desc           =   $request->desc;
 
         //Info
-        $status         =   $request->active_status;
+        $status         =   $request->status;
         $adminNotes     =   $request->admin_notes;
 
         //Images
@@ -224,10 +228,11 @@ class CoursesController extends Controller
 
 
         //Message Section
-        $saveSuccessMsg     =   MessageUtilities::dataSaveSuccessMessage();
-        $saveFailedMsg      =   MessageUtilities::dataSaveFailedMessage();
-        $updateSuccessMsg   =   MessageUtilities::dataUpdateSuccessMessage();
-        $updateFailedMsg    =   MessageUtilities::dataUpdateFailedMessage();
+        $saveSuccessMsg         =   MessageUtilities::dataSaveSuccessMessage();
+        $saveFailedMsg          =   MessageUtilities::dataSaveFailedMessage();
+        $updateSuccessMsg       =   MessageUtilities::dataUpdateSuccessMessage();
+        $updateFailedMsg        =   MessageUtilities::dataUpdateFailedMessage();
+        $invalidMediaCategory   =   MessageUtilities::invalidMediaCategory();
 
 
         if(!empty($courses)){
@@ -240,8 +245,10 @@ class CoursesController extends Controller
             if(isset($request->id_courses)){
                 $id =   $request->id_courses;
                 $dataArray  =   [
-                    'id_courses_category'   =>  $idCategory,
-                    'course_name'           =>   ucwords($courses),
+                    //'id_courses_category'   =>  $idCategory,
+                    'id_stream'             =>  $streams,
+                    'id_courses_category'   =>  $coursesCategory,
+                    'course_name'           =>  ucwords($courses),
                     'page_heading'          =>  $pageHeading,
                     'tagline'               =>  $tagline,
                     'description1'          =>  $desc1,
@@ -259,8 +266,22 @@ class CoursesController extends Controller
                 $data =   CoursesModel::where('id','=',$id)->update($dataArray);
 
                 if(!empty($data)){
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
+
+                    $_FILES['featured_image']['extra_name'] =   "courses_".$featuredCategory."_".$id;
+                    $_FILES['thumb_image']['extra_name']    =   "courses_".$thumbCategory."_".$id;
+
+                    $featuredBucketStatus =   $this->commonControllerObj->createBucketForMediaStorage($featuredCategory, $featuredBucketName);
+                    $thumbBucketStatus    =   $this->commonControllerObj->createBucketForMediaStorage($thumbCategory, $thumbBucketName);
+
+                    if($featuredBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->featuredImageUpload($featuredBucketStatus['bucket_name'], $featuredCategory, $id, $_FILES['featured_image']);
+                    }
+                    if($thumbBucketStatus['response']=="success")
+                    {
+
+                        $this->commonControllerObj->thumbImageUpload($thumbBucketStatus['bucket_name'], $thumbCategory, $id, $_FILES['thumb_image']);
+                    }
 
 
                     //Audit Entry
@@ -286,7 +307,9 @@ class CoursesController extends Controller
             else{
 
                 $dataArray  =   [
-                    'id_courses_category'   =>  $idCategory,
+                    //'id_courses_category'   =>  $idCategory,
+                    'id_stream'             =>  $streams,
+                    'id_courses_category'   =>  $coursesCategory,
                     'course_name'           =>   ucwords($courses),
                     'page_heading'          =>  $pageHeading,
                     'tagline'               =>  $tagline,
@@ -304,12 +327,25 @@ class CoursesController extends Controller
 
                 $data  =   CoursesModel::updateOrCreate($dataArray);
 
-                //$streamData =   StreamsModel::updateOrCreate($dataArray);
-
                 if(!empty($data->id)){
                     $id =   $data->id;
-                    $featuredImageUploadStatus  =   $this->commonControllerObj->featuredImageUpload($featuredBucketName, $featuredCategory, $id, $_FILES['featured_image']);
-                    $thumbImageUploadStatus     =   $this->commonControllerObj->thumbImageUpload($thumbBucketName, $thumbCategory, $id, $_FILES['thumb_image']);
+
+                    $_FILES['featured_image']['extra_name'] =   "courses_".$featuredCategory."_".$id;
+                    $_FILES['thumb_image']['extra_name']    =   "courses_".$thumbCategory."_".$id;
+
+                    $featuredBucketStatus =   $this->commonControllerObj->createBucketForMediaStorage($featuredCategory, $featuredBucketName);
+                    $thumbBucketStatus    =   $this->commonControllerObj->createBucketForMediaStorage($thumbCategory, $thumbBucketName);
+
+                    if($featuredBucketStatus['response']=="success")
+                    {
+                        $this->commonControllerObj->featuredImageUpload($featuredBucketStatus['bucket_name'], $featuredCategory, $id, $_FILES['featured_image']);
+                    }
+                    if($thumbBucketStatus['response']=="success")
+                    {
+
+                        $this->commonControllerObj->thumbImageUpload($thumbBucketStatus['bucket_name'], $thumbCategory, $id, $_FILES['thumb_image']);
+                    }
+
 
                     //Audit Entry
                     //------------------------------------------------------------------
@@ -353,16 +389,19 @@ class CoursesController extends Controller
 
         $idUser         =   Session::get('users.idUser')[0];
         $userData       =   DBUtilities::getUserInformation($idUser);
-        $ed             =   BusinessKeyDetailsModel::where('key_description','=','ED')->select('id','key_value')->get()->toArray();
-        $courseFullData =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-            ->select('c.category_name','courses.*')
+        $ed             =   BusinessKeyDetailsModel::where('business_key','=','ED')->select('id','key_value')->pluck('key_value')->toArray();
+
+        $courseFullData =   CoursesModel::join('streams As s','s.id','=','courses.id_courses_category')
+            ->leftJoin('courses_categories As c','c.id','=','courses.id_courses_category')
+            ->select('s.stream_name','courses.*','c.category_name As category_name')
             ->get();
-        $courseActive   =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-            ->select('c.category_name','courses.*')
-            ->where('courses.status','=','Enable')->get();
-        $courseInactive =   CoursesModel::join('courses_categories As c','c.id','=','courses.id_courses_category')
-            ->select('c.category_name','courses.*')
-            ->where('courses.status','=','Disable')->get();
+        $courseActive   =   CoursesModel::join('streams As s','s.id','=','courses.id_courses_category')
+            ->leftJoin('courses_categories As c','c.id','=','courses.id_courses_category')
+            ->select('s.stream_name','courses.*','c.category_name As category_name')
+            ->where('courses.status','=',0)->get();
+        $courseInactive =   CoursesModel::join('streams As s','s.id','=','courses.id_courses_category')
+            ->select('s.stream_name','courses.*')
+            ->where('courses.status','=',1)->get();
 
 
         $paramArray         =   [
@@ -392,20 +431,22 @@ class CoursesController extends Controller
 
         if(isset($idCourses)){
             switch($status){
-                case 'Enable':
-                    $dataArray  =   ['status'=>'Disable'];
+                case 0:
+                    $dataArray  =   ['status'=>1];
                     CoursesModel::where('id','=',$idCourses)->update($dataArray);
-
+                    return json_encode("success");
                     break;
-                case 'Disable':
-                    $dataArray  =   ['status'=>'Enable'];
+                case 1:
+                    $dataArray  =   ['status'=>0];
                     CoursesModel::where('id','=',$idCourses)->update($dataArray);
-
+                    return json_encode("success");
                     break;
+                default:
+                    return json_encode("failed");
 
             }
 
-            return json_encode("success");
+
         }
         else{
             return json_encode("invalid_user");
