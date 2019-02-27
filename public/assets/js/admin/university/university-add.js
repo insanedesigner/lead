@@ -38,7 +38,7 @@ $(function() {
         });
     }
 
-    var runSaveButtonEnableDisable   =   function(){
+    /*var runSaveButtonEnableDisable   =   function(){
         $('.nav-item').click(function(){
             var tabText   =   $.trim($(this).text());
 
@@ -53,7 +53,7 @@ $(function() {
             }
 
         });
-    }
+    }*/
 
     var runFeaturedImageUpload =   function(){
         $('.dropify').dropify();
@@ -216,7 +216,8 @@ $(function() {
                     if(event == "default"){
 
                         stateSelected   =   $('#state_hidden').val();
-                        $(".state option[value="+stateSelected+"]").attr('selected','selected');
+                        $('.state').find("option[value='"+stateSelected+"']").attr('selected','selected');
+                        //$(".state option[value="+stateSelected+"]").attr('selected','selected');
                     }
 
                     runStateManage();
@@ -253,7 +254,8 @@ $(function() {
                         if(event == "default"){
                             citySelected   =   $('#city_hidden').val();
 
-                            $(".city option[value="+citySelected+"]").attr('selected','selected');
+                            $('.city').find("option[value='"+citySelected+"']").attr('selected','selected');
+                            //$(".city option[value="+citySelected+"]").attr('selected','selected');
                         }
                     }
                 }

@@ -82,7 +82,16 @@ $(function() {
         $('.media_upload_btn').click(function(e){
             e.preventDefault();
             $('#id_university').val($(this).attr('data-value'));
-           $('#mediaAddForm').submit();
+           //$('#mediaAddForm').submit();
+        });
+    };
+
+    var mapCoursesButtonClick    =   function(){
+        $('.map_courses_btn').click(function(e){
+            e.preventDefault();
+            $('.id_mapping').val($(this).attr('data-value'));
+
+            $('#mapCoursesAddForm').submit();
         });
     }
 
@@ -94,6 +103,7 @@ $(function() {
     runUniversityDetails();
     editButtonClick();
     mediaButtonClick();
+    mapCoursesButtonClick();
 
 
 

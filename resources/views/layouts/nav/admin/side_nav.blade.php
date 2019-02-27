@@ -6,23 +6,19 @@
 
 <?php
 
-    $dashboardActive        =   "";
-    $addroleActive          =   "";
-    $viewroleActive         =   "";
-    $addStreamActive        =   "";
-    $viewStreamActive       =   "";
-    $addCoursesCatActive    =   "";
-    $viewCoursesCatActive   =   "";
-    $addCoursesActive       =   "";
-    $viewCoursesActive      =   "";
-    $addUniversityActive    =   "";
-    $viewUniversityActive   =   "";
-    $mediaUniversityActive  =   "";
-
-    //$idScreen           =   "";
-
-
-
+    $dashboardActive                =   "";
+    $addroleActive                  =   "";
+    $viewroleActive                 =   "";
+    $addStreamActive                =   "";
+    $viewStreamActive               =   "";
+    $addCoursesCatActive            =   "";
+    $viewCoursesCatActive           =   "";
+    $addCoursesActive               =   "";
+    $viewCoursesActive              =   "";
+    $addUniversityActive            =   "";
+    $viewUniversityActive           =   "";
+    $mediaUniversityActive          =   "";
+    $addCoursesToUniversityActive   =   "";
 
 
     if($idRole  ==  1){
@@ -66,6 +62,8 @@
                     break;
                 case 12:
                     $mediaUniversityActive  =    "active";
+                case 14:
+                    $addCoursesToUniversityActive   =   "active";
                     break;
 
 
@@ -130,10 +128,12 @@
                     <li class="{{$addUniversityActive }}"><a class="{{$addUniversityActive}}" href="university">Add</a></li>
                     <li class="{{$viewUniversityActive}}"><a class="{{$viewUniversityActive}}" href="manage_university">Manage </a></li>
                     @if($mediaUniversityActive == "active")
-                        <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}" href="media_university">Media Uploads </a></li>
-                    @else
-                        <li class="{{$mediaUniversityActive}}"><a class="{{$mediaUniversityActive}}">Media Uploads </a></li>
+                        <li class="{{$mediaUniversityActive}}"><a style="pointer-events: none" class="{{$mediaUniversityActive}}" href="media_university">Media Uploads </a></li>
+                    @elseif($addCoursesToUniversityActive   ==  "active")
+                        <li class="{{$addCoursesToUniversityActive}}"><a style="pointer-events: none" class="{{$addCoursesToUniversityActive}}" href="courses_university">Map Course </a></li>
                     @endif
+
+
                 </ul>
             </li>
 

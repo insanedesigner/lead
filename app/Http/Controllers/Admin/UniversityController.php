@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Common\MediaCategoryModel;
+use App\Models\Common\University\UniversityCourseMappingModel;
 use App\Models\Common\University\UniversityModel;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -719,7 +721,6 @@ class UniversityController extends Controller
 
 
     }
-
     public function handleUniversityImagesUploads(Request $request){
 
         $idUser         =   Session::get('users.idUser')[0];
@@ -814,7 +815,6 @@ class UniversityController extends Controller
 
 
     }
-
     public function handleUniversityBroucherUploads(Request $request){
         $idUser         =   Session::get('users.idUser')[0];
         $userData       =   DBUtilities::getUserInformation($idUser);
@@ -886,7 +886,340 @@ class UniversityController extends Controller
 
 
     }
+   /* public function showUniversityCourseMapping(Request $request){
+        $role           =   1;
+        $idRole         =   1;
+        $idUser         =   Session::get('users.idUser')[0];
+        $userData       =   DBUtilities::getUserInformation($idUser);
+        $idUniversity   =   $request->id_map_courses;
 
+        $universityData =   UniversityModel::select('id','university_name')->where('status','=',0)->pluck('university_name','id')->toArray();
+        $coursesData    =   CoursesModel::select('id','course_name')->where('status','=',0)->pluck('course_name','id')->toArray();
+
+        $action =   Session::get('action');
+
+        if(isset($action) && $action == "courses_map"){
+            $idUniversity   =   Session::get('id');
+            $redirectRoute  =   "showUniversityCourseMapping" ;
+            $error          =   Session::get('error');
+        }
+        else{
+
+            $redirectRoute  =   "showManageUniversity" ;
+            $error          =   "";
+        }
+
+        //Session::forget('id');
+        //Session::forget('action');
+
+
+
+
+        $universityData[0] =   "Select an University";
+        ksort($universityData);
+
+        $coursesData[0] =   "Select a Course";
+        ksort($coursesData);
+
+        if(!empty($idUniversity)){
+            $universityExistCheck   =   UniversityModel::find($idUniversity);
+
+            if(isset($universityExistCheck)){
+
+                $paramArray         =   [
+                    'pageBase'          =>  'Home',
+                    'pageTitle'         =>  'Map Course',
+                    'browserTitle'      =>   'University Management',
+                    'role'              =>   'ad',
+                    'idRole'            =>   1,
+                    'urlData'           =>   "admin/courses_university",
+                    'idUniversity'      =>   $idUniversity,
+                    'universityData'    =>   $universityData,
+                    'coursesData'       =>   $coursesData,
+                    'userData'          =>   $userData,
+                    'idScreen'          =>   14
+                ];
+                return view('admin.university.mapcourses',$paramArray);
+            }
+            else{
+
+                $invalidMsgs    =   MessageUtilities::invalidMessages('University');
+                return Redirect::route('showUniversityCourseMapping')->with($invalidMsgs);
+            }
+
+        }
+        else{
+            $invalidMsgs    =   MessageUtilities::invalidMessages('University');
+            return Redirect::route('showUniversityCourseMapping')->with($invalidMsgs);
+        }
+
+
+
+
+
+    }*/
+
+    public function showUniversityCourseMapping(Request $request){
+        $role           =   1;
+        $idRole         =   1;
+        $idUser         =   Session::get('users.idUser')[0];
+        $userData       =   DBUtilities::getUserInformation($idUser);
+        $idUniversity   =   $request->id_mapping;
+        $mappingData    =   "";
+        $courses        =   [];
+
+        $universityData =   UniversityModel::select('id','university_name')->where('status','=',0)->pluck('university_name','id')->toArray();
+        $courseDuration =   BusinessKeyDetailsModel::where('business_key','=','COURSE DURATION')->select('id','key_value')->pluck('key_value','key_value')->toArray();
+        $coursesData    =   CoursesModel::leftJoin('courses_categories As cc','cc.id','=','courses.id_courses_category')->where('cc.status','=',0)->where('courses.status','=',0) ->select('cc.category_name','courses.course_name','courses.id')->get();
+
+        if(!empty($coursesData)){
+            foreach($coursesData as $key=>$val){
+                $courseName =   $val['category_name']." - ".$val['course_name'];
+                $courses[$courseName]   =   $courseName;
+            }
+        }
+
+        $courses['-'] =   "Select a Course";
+        ksort($courses);
+
+        $idMapping    =   Session::get('id_mapping');
+
+
+        if(isset($idMapping) ){
+            $mappingData =   UniversityCourseMappingModel::where('id','=',$idMapping) ->first();
+            Session::forget('id_mapping');
+        }
+
+
+        if(!empty($mappingData)){
+            $idUniversity   =   $mappingData['id_university'];
+            $paramData =   [
+                'idUniversity'  =>  $mappingData['id_university'],
+                'courseName'    =>  $mappingData['course_name'],
+                'duration'      =>  $mappingData['duration'],
+                'fees'          =>  $mappingData['fees'],
+                'overview'      =>  $mappingData['overview'],
+                'eligibility'   =>  $mappingData['eligibility'],
+                'remarks'       =>  $mappingData['remarks']
+            ];
+        }
+        else{
+            $paramData =   [
+                'idUniversity'  =>  "",
+                'courseName'    =>  "",
+                'duration'      =>  "",
+                'fees'          =>  "",
+                'overview'      =>  "",
+                'eligibility'   =>  "",
+                'remarks'       =>  ""
+            ];
+        }
+
+
+
+
+        $paramArray         =   [
+            'pageBase'          =>  'Home',
+            'pageTitle'         =>  'Map Course',
+            'browserTitle'      =>   'University Management',
+            'role'              =>   'ad',
+            'idRole'            =>   1,
+            'urlData'           =>   "admin/courses_university",
+            'courseDuration'    =>   $courseDuration,
+            'data'              =>   $paramData,
+            'idUniversity'      =>   $idUniversity,
+            'universityData'    =>   $universityData,
+            'coursesData'       =>   $courses,
+            'userData'          =>   $userData,
+            'idScreen'          =>   14
+        ];
+
+
+
+        return view('admin.university.mapcourses',$paramArray);
+
+
+
+
+
+
+
+        //Seperate
+
+        /*$universityData =   UniversityModel::select('id','university_name')->where('status','=',0)->pluck('university_name','id')->toArray();
+        $courseDuration =   BusinessKeyDetailsModel::where('business_key','=','COURSE DURATION')
+                                    ->select('id','key_value')->pluck('key_value','key_value')->toArray();
+
+        $coursesData    =   CoursesModel::leftJoin('courses_categories As cc','cc.id','=','courses.id_courses_category')
+            ->where('cc.status','=',0)
+            ->where('courses.status','=',0)
+            ->select('cc.category_name','courses.course_name','courses.id')->get();
+
+        $courses        =   [];
+
+        if(!empty($coursesData)){
+            foreach($coursesData as $key=>$val){
+                $courseName =   $val['category_name']." - ".$val['course_name'];
+                $courses[$courseName]   =   $courseName;
+            }
+        }
+
+        $courses['-'] =   "Select a Course";
+        ksort($courses);
+
+
+
+
+        $idMapping    =   Session::get('id_mapping');
+
+
+       if(isset($idMapping) ){
+           $mappingData =   UniversityCourseMappingModel::where('id','=',$idMapping) ->first();
+
+           Session::forget('id_mapping');
+
+       }
+
+        $universityData[0] =   "Select an University";
+        ksort($universityData);
+
+
+
+        if(!empty($mappingData)){
+            $paramData =   [
+                'idUniversity'  =>  $mappingData['id_university'],
+                'courseName'    =>  $mappingData['course_name'],
+                'duration'      =>  $mappingData['duration'],
+                'fees'          =>  $mappingData['fees'],
+                'overview'      =>  $mappingData['overview'],
+                'eligibility'   =>  $mappingData['eligibility'],
+                'remarks'       =>  $mappingData['remarks']
+            ];
+        }
+        else{
+            $paramData =   [
+                'idUniversity'  =>  "",
+                'courseName'      =>  "",
+                'duration'      =>  "",
+                'fees'          =>  "",
+                'overview'      =>  "",
+                'eligibility'   =>  "",
+                'remarks'       =>  ""
+            ];
+        }
+
+
+
+                $paramArray         =   [
+                    'pageBase'          =>  'Home',
+                    'pageTitle'         =>  'Map Course',
+                    'browserTitle'      =>   'University Management',
+                    'role'              =>   'ad',
+                    'idRole'            =>   1,
+                    'urlData'           =>   "admin/courses_university",
+                    'courseDuration'    =>   $courseDuration,
+                    'data'              =>   $paramData,
+                    'idUniversity'      =>   $idUniversity,
+                    'universityData'    =>   $universityData,
+                    'coursesData'       =>   $courses,
+                    'userData'          =>   $userData,
+                    'idScreen'          =>   14
+                ];
+                return view('admin.university.mapcourses',$paramArray);
+
+*/
+
+        //Seperate Ends
+
+
+
+
+
+
+
+    }
+
+
+
+    public function handleUniversityCoursesMapping(Request $request){
+    $idUser         =   Session::get('users.idUser')[0];
+    $userData       =   DBUtilities::getUserInformation($idUser);
+    $ipaddress      =   $_SERVER['SERVER_ADDR'];
+
+    $university         =   $request->university;
+    $courses            =   $request->courses;
+    $coursesDuration    =   $request->courses_duration;
+    $fees               =   $request->fees;
+    $overview           =   $request->overview;
+    $eligibility        =   $request->eligibility;
+    $remarks            =   $request->remarks;
+
+    //Message Section
+    $uploadFailedMsg    =   MessageUtilities::uploadFailed();
+    $saveSuccessMsg     =   MessageUtilities::dataSaveSuccessMessage();
+    $saveFailedMsg      =   MessageUtilities::dataSaveFailedMessage();
+    $updateSuccessMsg   =   MessageUtilities::dataUpdateSuccessMessage();
+
+
+        if(!empty($university) && !empty($courses)){
+            $mappingExist   =   UniversityCourseMappingModel::where('course_name','=',$courses)->where('id_university','=',$university)->first();
+
+            //dd($mappingExist);
+
+            if(isset($mappingExist)){
+                $dataArray  =   [
+                    'course_duration'   =>  $coursesDuration,
+                    'fees'              =>  $fees,
+                    'overview'          =>  $overview,
+                    'eligibility'       =>  $eligibility,
+                    'remarks'           =>  $remarks,
+                    'edited_by'         =>  $idUser,
+                    'edited_date'       =>  date('Y-m-d H:i:s')
+
+                ];
+
+                            UniversityCourseMappingModel::where('id_university','=',$university)->where('course_name','=',$courses)->update($dataArray);
+                $data   =   UniversityCourseMappingModel::where('id_university','=',$university)->where('course_name','=',$courses)->select('id')->first();
+
+                if(isset($data['id'])){
+                    $updateSuccessMsg['id_mapping']      =   $data['id'];
+                    return Redirect::route('showUniversityCourseMapping')->with($updateSuccessMsg);
+                }
+
+            }
+            else{
+                $dataArray  =   [
+                    'id_university'     =>  $university,
+                    'course_name'       =>  $courses,
+                    'course_duration'   =>  $coursesDuration,
+                    'fees'              =>  $fees,
+                    'overview'          =>  $overview,
+                    'eligibility'       =>  $eligibility,
+                    'remarks'           =>  $remarks,
+                    'created_by'        =>  $idUser,
+                    'created_date'      =>  date('Y-m-d H:i:s')
+
+                ];
+
+                $data   =   UniversityCourseMappingModel::insertGetId($dataArray);
+
+                if($data){
+                    $saveSuccessMsg['id_mapping']   =   $data;
+                    return Redirect::route('showUniversityCourseMapping')->with($saveSuccessMsg);
+                }
+            }
+
+
+        }
+        else{
+            $invalidMsg =   MessageUtilities::invalidMessages('University Or Course');
+            return Redirect::route('showUniversityCourseMapping')->withInput()->with($invalidMsg);
+        }
+
+    }
+
+
+    //Ajax Request Management Sections
     public function loadMediaForUniversity(Request $request){
         $idUniversity   =   $request->id;
 
@@ -913,7 +1246,6 @@ class UniversityController extends Controller
             return json_encode($param);
         }
     }
-
     public function handleUniversityMediaDelete(Request $request){
         $idUniversity   =   $request->id_university;
         $idMedia        =   $request->id_logo;

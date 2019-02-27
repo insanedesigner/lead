@@ -18,6 +18,13 @@
                     <div class="card">
                         <div class="card-body p-b-0">
                             @include('includes.alert_message.alert_message',['error' => Session::get('error'), 'success' => Session::get('success')])
+
+                            {{--<div class="form-group text-right">
+                                {{ Form::open(array('url'=>'admin/courses_university','class'=>'floating-labels','id'=>'mapCoursesAddForm'))  }}
+                                    <a href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-primary map_courses_btn" title="Map Course"><span style="font-size:12px">Map Course to university</span> </a>
+                                {{ Form::close() }}
+                            </div>--}}
+
                         </div>
 
                         <!-- Nav tabs -->
@@ -106,7 +113,7 @@
                                             {{--<th>Courses Name</th>--}}
                                             <th>Status</th>
                                             <th>Action</th>
-
+                                            <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -152,16 +159,24 @@
                                                 </td>
                                                 <td>
                                                     {{ Form::open(array('url'=>'admin/university','class'=>'floating-labels','id'=>'universityEditForm'))  }}
-                                                        {!! Form::hidden('id', '', ['class' => 'form-control','id'=>'id']) !!}
+                                                        {!! Form::hidden('id', '', ['class' => 'form-control id','id'=>'id']) !!}
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-danger edit_btn" title="Edit"><span style="font-size:12px"><i class="fa fa-edit"></i> </span> </a>
                                                         <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-info media_upload_btn" title="Media Uploads"><span style="font-size:12px"><i class="fa fa-image"></i></span> </a>
-                                                        {{--<a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning add_courses_btn"><span style="font-size:12px">Add Courses</span> </a>--}}
+                                                        {{--<a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-warning map_courses_btn"><span style="font-size:12px"><i class="fa fa-paperclip"></i></span> </a>--}}
 
                                                     {{ Form::close() }}
 
                                                     {{ Form::open(array('url'=>'admin/media_university','class'=>'floating-labels','id'=>'mediaAddForm'))  }}
-                                                        {!! Form::hidden('id_university', '', ['class' => 'form-control','id'=>'id_university']) !!}
+                                                        {!! Form::hidden('id_university', '', ['class' => 'form-control id_university','id'=>'id_university']) !!}
                                                     {{ Form::close() }}
+
+                                                </td>
+                                                <td>
+                                                    {{ Form::open(array('url'=>'admin/courses_university','class'=>'floating-labels','id'=>'mapCoursesAddForm'))  }}
+                                                        {!! Form::hidden('id_mapping', '', ['class' => 'form-control id_mapping','id'=>'id_mapping']) !!}
+                                                        <a data-value="{{$val->id}}" href="" class="btn waves-effect waves-light btn-rounded btn-xs btn-danger btn-outline-primary map_courses_btn" title="Map Course"><span style="font-size:12px">Map Course </span> </a>
+                                                    {{ Form::close() }}
+
                                                 </td>
 
                                             </tr>
@@ -241,6 +256,8 @@
                                 </div>
                             </div>
                         </div>
+
+
 
 
                     </div>
