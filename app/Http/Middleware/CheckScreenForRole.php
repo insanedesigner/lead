@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
-class IsUserValid
+class CheckScreenForRole
 {
     /**
      * Handle an incoming request.
@@ -30,7 +30,7 @@ class IsUserValid
         }*/
         //dd($request->session()->has('users.idUser'));
 
-        if ($request->session()->has('users.idUser')) {
+        if ($request->session()->has('users.idRole')) {
             return $next($request);
         }
         else{

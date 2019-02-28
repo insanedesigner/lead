@@ -1,6 +1,6 @@
 <div class="scroll-sidebar">
 
-    @if($role == "ad")
+    @if($roleKey == "admin")
         @include('layouts.nav.admin.side_nav')
     @endif
 </div>

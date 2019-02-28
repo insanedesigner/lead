@@ -21,9 +21,9 @@ class DBUtilities{
                 ->first();
             return $userData;*/
 
-            $userData   =   LoginModel::from('users As u')
-                ->join('users_info As ui','u.id','=','ui.id_user')
-                ->select('ui.first_name','ui.middle_name','ui.last_name')
+            $userData   =   LoginModel::from('user As u')
+                ->join('user_info As ui','u.id_user_info','=','u.id_user_info')
+                ->select('ui.first_name','ui.last_name')
                 ->first();
             return $userData;
 
@@ -35,12 +35,14 @@ class DBUtilities{
     }
     public static function getScreenRole($idRole){
         if(!empty($idRole)){
-            $screenRoleMapData  =   ScreenRolesMapModel::from('user_screen_role_map As usrm')
-                    ->leftJoin('user_roles As ur','ur.id_roles','=','usrm.id_roles')
-                    ->leftJoin('user_screens As us','us.id_user_screen','usrm.id_user_screen')
-                    ->where('usrm.id_roles','=',$idRole)
-                    ->select('usrm.*','us.*','ur.*')
+            $screenRoleMapData  =   ScreenRolesMapModel::from('mapping_user_role_screen As map')
+                    ->leftJoin('user_role As role','role.id_role','=','map.id_user_role')
+                    ->leftJoin('screens As screen','screen.id_screen','map.id_user_screen')
+                    ->where('map.id_user_role','=',$idRole)
+                    /*->select('map.*','screen.*','role.*')*/
+                    ->select('map.id_user_screen','screen.sub_screen')
                     ->get();
+
 
             return $screenRoleMapData;
 

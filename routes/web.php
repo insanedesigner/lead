@@ -23,6 +23,12 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //Admin Controller
 Route::any('admin/dashboard', 'Admin\AdminController@showDashboard')->name('adminDashboard')->middleware('validuser');
+Route::any('admin/add_agency', 'Admin\AgencyController@showAddAgency')->name('addAgency')->middleware('validuser');
+Route::any('admin/manage_agency', 'Admin\AgencyController@showManageAgency')->name('manageAgency')->middleware('validuser');
+Route::any('admin/handleAddAgency', 'Admin\AgencyController@handleAddAgency')->name('handleAddAgency')->middleware('validuser');
+
+
+
 Route::any('admin/streams', 'Admin\StreamsController@showAddStreams')->name('showAddStreams')->middleware('validuser');
 Route::any('admin/handleAddStreamContents', 'Admin\StreamsController@handleAddStreamContents')->name('handleAddStreamContents')->middleware('validuser');
 Route::any('admin/manage_streams', 'Admin\StreamsController@showViewStreams')->name('showViewStreams')->middleware('validuser');

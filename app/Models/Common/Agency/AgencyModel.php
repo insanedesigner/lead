@@ -4,7 +4,7 @@ namespace App\Models\Common;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StatesModel extends Model
+class AgencyModel extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -12,8 +12,8 @@ class StatesModel extends Model
      * @var bool
      */
     public $timestamps      =   false;
-    protected $table        =   "states";
-    protected $primaryKey   =   "id";
-    protected $guarded      =   ['id'];
+    protected $table        =   "agency";
+    protected $primaryKey   =   "id_agency";
+    protected $guarded      =   ['id_agency'];
 
 }

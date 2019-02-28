@@ -16,36 +16,13 @@ use App\Models\Auth\LoginModel;
 use App\Models\Users\UserTypeModel;
 
 //Utilities
+use App\Classes\DBUtilities;
 use App\Classes\MessageUtilities;
 use App\Classes\AuditUtilities;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
-    //use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    //protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         //$this->middleware('guest')->except('logout');
@@ -53,7 +30,7 @@ class LoginController extends Controller
 
     public function showLogin(){
 
-        /*$pass   =   Hash::make("admin");
+       /* $pass   =   Hash::make("admin");
         echo $pass;
 
         dd();*/
@@ -68,38 +45,51 @@ class LoginController extends Controller
         $request->session()->flush();
         $ipaddress = $_SERVER['SERVER_ADDR'];
 
+
+
+
+
         if($request->has('username') && $request->has('password')){
             $username   =   $request->username;
             $password   =   $request->password;
 
-            /*$userAuth   =   LoginModel::where('username','=',$username)
-                ->leftJoin('users_info As ui','users.id_users_info','=','ui.id_users_info')
-                ->leftJoin('user_roles As r','ui.id_roles','=','r.id_roles')
-                ->select('users.id_user','users.username','users.password','ui.id_roles','ui.first_name','ui.last_name','r.name As role_name','r.title As role')
-                ->first();*/
+
 
             $userAuth   =   LoginModel::where('username','=',$username)
-                ->select('users.id','users.username','users.password')
+                ->leftJoin('user_info As ui','user.id_user_info','=','ui.id_user_info')
+                ->leftJoin('user_role As r','ui.id_user_role','=','r.id_role')
+                ->leftJoin('user_type As ut','ut.id_user_type','=','ui.id_user_type')
+                ->select('user.id_user','user.username','user.password','ui.id_user_role','ui.id_user_type', 'ui.first_name','ui.last_name','r.role_name','r.role_key','ut.type_name','ut.type_key')
                 ->first();
+
+
 
 
             if(!empty($userAuth->username)){
 
                 if(password_verify($password, $userAuth->password )){
-                    /*$role   =   $userAuth->role;
-                    $idRole =   $userAuth->id_roles;
-                    $idUser =   $userAuth->id;
-                    Session::put('role',$role);
+                    $roleKey        =   $userAuth->role_key;
+                    $idRole         =   $userAuth->id_user_role;
+                    $idUser         =   $userAuth->id_user;
+                    $idUserType     =   $userAuth->id_user_type;
+                    $userTypeKey    =   $userAuth->type_key;
+                    //Session::put('role',$role);
 
 
-                    $request->session()->push('users.role', $role);
+                    $request->session()->push('users.roleKey', $roleKey);
                     $request->session()->push('users.idRole', $idRole);
                     $request->session()->push('users.idUser', $idUser);
+                    $request->session()->push('users.idUsersType', $idUserType);
+                    $request->session()->push('users.idUserTypeKey', $userTypeKey);
 
-                    switch($role){
-                        case 'ad':
+
+
+                    switch($userTypeKey){
+                        case 'su':
+
+
                             return Redirect::route('adminDashboard');
-                            //return view('admin.dashboard');
+                            //return view('admin.superadmin');
                             break;
 
                         default:
@@ -107,7 +97,7 @@ class LoginController extends Controller
                     }
 
 
-                    return Redirect::route('adminDashboard');*/
+                    return Redirect::route('adminDashboard');
 
 
                     $idUser =   $userAuth->id;

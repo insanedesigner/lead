@@ -12,7 +12,7 @@ class LoginModel extends Model
      * @var bool
      */
     public $timestamps      =   false;
-    protected $table        =   "users";
+    protected $table        =   "user";
     protected $primaryKey   =   "id";
     protected $guarded      =   ['id'];
 
