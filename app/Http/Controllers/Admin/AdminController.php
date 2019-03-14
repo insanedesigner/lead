@@ -44,8 +44,11 @@ class AdminController extends Controller
         $idRole     =   Session::get('users.idRole')[0];
         $roleKey    =   Session::get('users.roleKey')[0];
 
+        //dd($idRole);
+
         $userData   =   DBUtilities::getUserInformation($idUser);
         $screenData =   DBUtilities::getScreenRole($idRole)->toArray();
+        //$screenData =   [1,2,3,4,5];
 
         $paramArray         =   [
             'pageBase'     =>   'Home',

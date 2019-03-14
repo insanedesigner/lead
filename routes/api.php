@@ -17,20 +17,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/streamDescriptionImageUpload', 'Admin\StreamsController@streamDescriptionImageUpload')->name('streamDescriptionImageUpload');
-Route::post('/handleStreamStatusChange', 'Admin\StreamsController@handleStreamStatusChange')->name('handleStreamStatusChange');
-Route::post('/coursesCategoryDescriptionImageUpload', 'Admin\CoursesCategoryController@coursesCategoryDescriptionImageUpload')->name('coursesCategoryDescriptionImageUpload');
-Route::post('/loadCoursesCategory', 'Admin\AdminController@loadCoursesCategory')->name('loadCoursesCategory');
-Route::post('/handleCoursesCategoryStatusChange', 'Admin\CoursesCategoryController@handleCoursesCategoryStatusChange')->name('handleCoursesCategoryStatusChange');
-Route::post('/coursesDescriptionImageUpload', 'Admin\CoursesController@coursesDescriptionImageUpload')->name('coursesDescriptionImageUpload');
-Route::post('/handleCoursesStatusChange', 'Admin\CoursesController@handleCoursesStatusChange')->name('handleCoursesStatusChange');
-Route::post('/loadCoursesDetails', 'Common\CommonController@loadCoursesDetails')->name('loadCoursesDetails');
-Route::post('/universityDescriptionImageUpload', 'Admin\UniversityController@universityDescriptionImageUpload')->name('universityDescriptionImageUpload');
+Route::post('/handleAgencyStatusChange', 'Admin\AgencyController@handleAgencyStatusChange')->name('agencyStatusChange');
 Route::post('/loadStateOnCountries', 'Common\CommonController@loadStateOnCountries')->name('loadStateOnCountries');
 Route::post('/loadCityOnStates', 'Common\CommonController@loadCityOnStates')->name('loadCityOnStates');
-Route::post('/handleUniversityStatusChange', 'Admin\UniversityController@handleUniversityStatusChange')->name('handleUniversityStatusChange');
-Route::post('/loadMediaForUniversity', 'Admin\UniversityController@loadMediaForUniversity')->name('loadMediaForUniversity');
-Route::post('/handleUniversityMediaDelete', 'Admin\UniversityController@handleUniversityMediaDelete')->name('handleUniversityMediaDelete');
+Route::post('/loadLead', 'Admin\LeadController@loadLead')->name('autocomplete');
+Route::post('/mapLeadToAgency', 'Admin\LeadController@mapLeadToAgency');
+Route::post('/loadMapLeadAgency', 'Admin\LeadController@loadMapLeadAgency');
+Route::post('/loadUser', 'Admin\UserController@loadLead')->name('autocomplete');
+Route::post('/handleUserStatusChange', 'Admin\UserController@handleUserStatusChange')->name('handleUserStatusChange');
+Route::post('/handleEmailCheck', 'Admin\AgencyController@handleEmailCheck')->name('handleEmailCheck');
+Route::post('/mapUserAgency', 'Admin\AgencyController@mapUserAgency')->name('mapUserAgency');
+Route::post('/handleAddUserFromAgency', 'Admin\UserController@handleAddUserFromAgency')->name('handleAddUserFromAgency');
+
 
 
 //Route::post('/testAjax', 'Admin\AdminController@streamDescriptionImageUploader')->name('streamImageUploader');

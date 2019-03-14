@@ -4,7 +4,7 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserInfoModel extends Model
+class UserModel extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -12,8 +12,8 @@ class UserInfoModel extends Model
      * @var bool
      */
     public $timestamps      =   false;
-    protected $table        =   "user_info";
-    protected $primaryKey   =   "id_user_info";
-    protected $guarded      =   ['id_user_info'];
+    protected $table        =   "user";
+    protected $primaryKey   =   "id_user";
+    protected $guarded      =   ['id_user'];
 
 }

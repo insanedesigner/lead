@@ -64,16 +64,22 @@ class LoginController extends Controller
 
 
 
-
             if(!empty($userAuth->username)){
 
+
                 if(password_verify($password, $userAuth->password )){
+
+                    dd("s");
+
                     $roleKey        =   $userAuth->role_key;
                     $idRole         =   $userAuth->id_user_role;
                     $idUser         =   $userAuth->id_user;
                     $idUserType     =   $userAuth->id_user_type;
                     $userTypeKey    =   $userAuth->type_key;
                     //Session::put('role',$role);
+
+                    echo "sss"; dd();
+
 
 
                     $request->session()->push('users.roleKey', $roleKey);
@@ -86,10 +92,11 @@ class LoginController extends Controller
 
                     switch($userTypeKey){
                         case 'su':
-
-
                             return Redirect::route('adminDashboard');
                             //return view('admin.superadmin');
+                            break;
+                        case 'user':
+                            return Redirect::route('showAgencySelectionPage');
                             break;
 
                         default:

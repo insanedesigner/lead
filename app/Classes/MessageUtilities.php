@@ -24,6 +24,10 @@ class MessageUtilities{
         $message    =   ['error' => 'Failed to update data.'];
         return $message;
     }
+    public static function nothingToUpdate(){
+        $message    =   ['error' => 'No changes to update.'];
+        return $message;
+    }
     public static function emptyFiledsMessage($filedNames){
         $message    =   ['error' => 'Please fill '.$filedNames];
 
@@ -44,6 +48,17 @@ class MessageUtilities{
         $message    =   ['error' => 'Invalid Media Category.'];
         return $message;
     }
+
+    public static function alreadyExistMessages($fieldName){
+        $message    =   ['error' => $fieldName.' already exists.'];
+        return $message;
+    }
+
+    public static function passwordAndConfirmPasswordNotMatch(){
+        $message    =   ['error' => "Password and Confirm Password does not matching."];
+        return $message;
+    }
+
 
 
 }

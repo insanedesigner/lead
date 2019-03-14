@@ -2,12 +2,18 @@
 namespace App\Classes;
 
 //Models
+use App\Models\Common\BusinessKeyDetailsModel;
 use App\Models\Auth\LoginModel;
+use App\Models\Common\Courses\CoursesModel;
 use App\Models\Users\UserInfoModel;
+use App\Models\Users\UserTypeModel;
 use App\Models\Common\UrlModel;
 use App\Models\Common\ScreenModel;
 use App\Models\Common\RolesModel;
 use App\Models\Common\ScreenRolesMapModel;
+use App\Models\Common\CountriesModel;
+use App\Models\Common\StatesModel;
+use App\Models\Common\CitiesModel;
 
 
 
@@ -60,6 +66,50 @@ class DBUtilities{
         else{
             return $urlData =   "";
         }
+    }
+
+    public static function countryList(){
+        $countries      =   CountriesModel::select('id','name')->pluck('name','id')->toArray();
+        $countries[0] =   "Select a country";
+        ksort($countries);
+
+        return $countries;
+
+    }
+
+    public static function stateList(){
+        $states         =   StatesModel::select('id','name')->pluck('name','id')->toArray();
+        $states[0] =   "Select a state";
+        ksort($states);
+
+        return $states;
+
+    }
+    public static function cityList(){
+        $cities         =   CitiesModel::select('id','name')->pluck('name','id')->toArray();
+        $cities[0] =   "Select a city";
+        ksort($cities);
+
+        return $cities;
+
+    }
+
+    public static function genderList(){
+        $gender     =   BusinessKeyDetailsModel::where('business_key','=','GENDER')->select('id','key_value')->pluck('key_value','key_value')->toArray();
+        return $gender;
+
+    }
+
+    public static function status(){
+        $status         =   BusinessKeyDetailsModel::select('id','key_value')->where('business_key','=','ED')->pluck('key_value')->toArray();
+        return $status;
+
+    }
+
+    public static function  userTypes(){
+        $data         =  UserTypeModel::select('id_user_type','type_name')->pluck('type_name','id_user_type')->toArray();
+        return $data;
+
     }
 }
 
