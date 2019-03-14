@@ -157,6 +157,11 @@
                                                                                                     <label for="email">Email</label>
                                                                                                 </div>
                                                                                                 <div class="add_user_main_div" style="display: none">
+                                                                                                    <div class="form-group m-b-40">
+                                                                                                        <input type="password" name="password" class="form-control" id="password">
+                                                                                                        <span class="bar"></span>
+                                                                                                        <label for="name">Name</label>
+                                                                                                    </div>
 
                                                                                                     <div class="form-group m-b-40">
                                                                                                         {!! Form::text('name','', ['class' => 'form-control name','id'=>'name'.$val->id_agency,'data-value'=>$val->id_agency]) !!}

@@ -65,11 +65,19 @@ class LoginController extends Controller
 
 
             if(!empty($userAuth->username)){
+                /*if (Hash::check($password, $userAuth->password))
+                {
+                   echo "matches";
+                }
+                else{
+                    echo "not";
+                }
 
+                dd();*/
 
                 if(password_verify($password, $userAuth->password )){
 
-                    dd("s");
+
 
                     $roleKey        =   $userAuth->role_key;
                     $idRole         =   $userAuth->id_user_role;
@@ -78,7 +86,7 @@ class LoginController extends Controller
                     $userTypeKey    =   $userAuth->type_key;
                     //Session::put('role',$role);
 
-                    echo "sss"; dd();
+                    //echo "sss"; dd();
 
 
 
