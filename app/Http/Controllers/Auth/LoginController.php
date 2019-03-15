@@ -71,13 +71,14 @@ class LoginController extends Controller
                 }
                 else{
                     echo "not";
-                }
+                }*/
 
-                dd();*/
+
 
                 if(password_verify($password, $userAuth->password )){
 
 
+                    //dd("ss");
 
                     $roleKey        =   $userAuth->role_key;
                     $idRole         =   $userAuth->id_user_role;

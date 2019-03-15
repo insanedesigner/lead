@@ -4,6 +4,7 @@ namespace App\Classes;
 //Models
 use App\Models\Common\BusinessKeyDetailsModel;
 use App\Models\Auth\LoginModel;
+use App\Models\Users\UserModel;
 use App\Models\Common\Courses\CoursesModel;
 use App\Models\Users\UserInfoModel;
 use App\Models\Users\UserTypeModel;
@@ -19,6 +20,7 @@ use App\Models\Common\CitiesModel;
 
 class DBUtilities{
     public static function getUserInformation($idUser){
+
         if(!empty($idUser)){
            /* $userData   =   LoginModel::from('users As u')
                 ->join('users_info As ui','u.id_users_info','=','ui.id_users_info')
@@ -27,9 +29,10 @@ class DBUtilities{
                 ->first();
             return $userData;*/
 
-            $userData   =   LoginModel::from('user As u')
-                ->join('user_info As ui','u.id_user_info','=','u.id_user_info')
-                ->select('ui.first_name','ui.last_name')
+            $userData   =  UserModel::where('user.id_user','=',$idUser)
+                ->join('user_info As ui','ui.id_user_info','=','user.id_user_info')
+                ->select('ui.first_name','ui.last_name','ui.id_user_info')
+
                 ->first();
             return $userData;
 

@@ -360,6 +360,44 @@ class UserController extends Controller
         return view('admin.user.manage',$paramArray);
     }
 
+    public function showAgencySelectionPage(Request $request){
+        $idUser     =   Session::get('users.idUser')[0];
+        $idRole     =   Session::get('users.idRole')[0];
+        $roleKey    =   Session::get('users.roleKey')[0];
+
+        $userData   =   DBUtilities::getUserInformation($idUser);
+        $screenData =   DBUtilities::getScreenRole($idRole)->toArray();
+
+        //dd($userData);
+
+        $agencyData =   UserInfoModel::where('user_info.id_user_info','=',$userData['id_user_info'])
+            ->leftJoin('mapping_user_agency As mua','mua.id_user_info','=','user_info.id_user_info')
+            ->leftJoin('agency','agency.id_agency','=','mua.id_agency')
+            ->pluck('agency.agency_name','mua.id_agency');
+
+
+
+        $paramArray         =   [
+            'pageBase'          =>   'Home',
+            'pageTitle'         =>   'User Management',
+            'browserTitle'      =>   'User Management',
+            'roleKey'           =>   $roleKey,
+            'idRole'            =>   $idRole,
+            'urlData'           =>   "user/agency",
+            'userData'          =>   $userData,
+            'screenData'        =>   $screenData,
+            'agencyData'        =>   $agencyData,
+            'screenDataArray'   =>   '',
+
+            'idScreen'          =>   5
+        ];
+
+        return view('agency.agency_choose',$paramArray);
+
+
+    }
+
+
 
     //Ajax Requests
     public function loadUser(Request $request){
@@ -411,10 +449,12 @@ class UserController extends Controller
     }
 
     public function handleAddUserFromAgency(Request $request){
-        $idUser =   Session::get('users.idUser')[0];
-        $email  =   $request->email;
-        $name   =   $request->name;
-        $phone  =   $request->phone;
+        $idUser     =   Session::get('users.idUser')[0];
+        $email      =   $request->email;
+        $name       =   $request->name;
+        $phone      =   $request->phone;
+        $password   =   $request->password;
+        $idAgency   =   $request->id_agency;
 
 
 
@@ -448,7 +488,8 @@ class UserController extends Controller
                     $dataArray  =   [
                         'id_user_info'  =>  $userInfoSave,
                         'username'      =>  $email,
-                        'password'      =>  Hash::make(str_random(8)),
+                        //'password'      =>  Hash::make(str_random(8)),
+                        'password'      =>  Hash::make(trim($password)),
                     ];
 
                     if(UserModel::insert($dataArray)){
@@ -456,8 +497,18 @@ class UserController extends Controller
                             'status'    =>  'success',
                             'msg'       =>  'User added successfully. ',
                             'username'  =>  $email,
-                            'password'  =>  str_random(8)
+                            'password'  => $password
                         ];
+
+                        $mappingString  =   [
+                            'id_user_info'   =>  $userInfoSave,
+                            'id_agency'      => $idAgency,
+                            'created_date'   => date('Y-m-d H:i:s')
+                        ];
+
+                       // dd($mappingString);
+
+                        MapUserAgencyModel::insert($mappingString);
 
                         return json_encode($msgString);
                     }
@@ -499,11 +550,16 @@ class UserController extends Controller
 
     }
 
-    public function showAgencySelectionPage(Request $request){
-        $idUser =   Session::get('users.idUser')[0];
+    public function handleAgencySelect(Request $request){
+        $idAgency   =   $request->id_agency;
 
-        echo $idUser;
+        $request->session()->push('users.idAgencySelected', $idAgency);
+
+        $returnArray    =   ['status'=>'success', 'msg'=>'success'];
+        return json_encode($returnArray);
+
     }
+
 
 
 }

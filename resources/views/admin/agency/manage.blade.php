@@ -158,9 +158,9 @@
                                                                                                 </div>
                                                                                                 <div class="add_user_main_div" style="display: none">
                                                                                                     <div class="form-group m-b-40">
-                                                                                                        <input type="password" name="password" class="form-control" id="password">
+                                                                                                        <input type="password" name="password" class="form-control" id="password{{$val->id_agency}}">
                                                                                                         <span class="bar"></span>
-                                                                                                        <label for="name">Name</label>
+                                                                                                        <label for="password">Password</label>
                                                                                                     </div>
 
                                                                                                     <div class="form-group m-b-40">

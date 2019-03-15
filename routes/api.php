@@ -28,6 +28,7 @@ Route::post('/handleUserStatusChange', 'Admin\UserController@handleUserStatusCha
 Route::post('/handleEmailCheck', 'Admin\AgencyController@handleEmailCheck')->name('handleEmailCheck');
 Route::post('/mapUserAgency', 'Admin\AgencyController@mapUserAgency')->name('mapUserAgency');
 Route::post('/handleAddUserFromAgency', 'Admin\UserController@handleAddUserFromAgency')->name('handleAddUserFromAgency');
+Route::post('/handleAgencySelect', 'Admin\UserController@handleAgencySelect')->name('handleAgencySelect');
 
 
 

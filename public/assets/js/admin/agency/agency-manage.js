@@ -259,7 +259,8 @@ $(function() {
            var email        =   $('#email'+idAgency).val()
            var name         =   $('#name'+idAgency).val();
            var phone        =   $('#phone'+idAgency).val();
-           var dataString   =   'name='+name+'&phone='+phone+'&email='+email;
+           var password     =   $('#password'+idAgency).val();
+           var dataString   =   'name='+name+'&phone='+phone+'&email='+email+'&password='+password+'&id_agency='+idAgency;
 
 
            $.ajax({
